@@ -1,48 +1,27 @@
-        //Hier ergolgt die Angabe der Landkreis OBJECTID! Bspw. 239 = Landkreis München
-    	//OBJECTID hier ermitteln: https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0
+        /** Angabe der Landkreis OBJECTID! Bspw. 239 = Landkreis München
+    	    OBJECTID hier ermitteln: https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0 */
 	    var landkreisObjectId = '239'; 
 
-        //** USER INPUTS */
-        var gemeindeschluessel = '9184';
-        var format = 'json';
-        var grenzwertHospitalisierung = 1200;
-        var grenzwertIntensivBehandlung = 600;
-        var grenzwertInzidenz = 35;
-        var hospitalisierteFaelle = 336;
-        var faelleCovidAktuell = 0;
-        //** USER INPUTS END */
+        /** Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB */
+        var grenzwertHospitalisierung = 1200; //Bayern = 1200
 
-        //TEST
-        var url_string = window.location.href; // www.test.com?filename=test
-        var url = new URL(url_string);
-        //var  = url.searchParams.get("go");
-        if(url.searchParams.get("g1")) {
-            grenzwertHospitalisierung = Number.parseInt(url.searchParams.get("g1"));
-        }
-        if(url.searchParams.get("g2")) {
-            grenzwertIntensivBehandlung = Number.parseInt(url.searchParams.get("g2"));
-        }
-        if(url.searchParams.get("g3")) {
-            grenzwertInzidenz = Number.parseInt(url.searchParams.get("g3"));
-        }
-        if(url.searchParams.get("g4")) {
-            hospitalisierteFaelle = Number.parseInt(url.searchParams.get("g4"));
-        }
-        if(url.searchParams.get("g5")) {
-            faelleCovidAktuell = Number.parseInt(url.searchParams.get("g5"));
-        }
-        if(url.searchParams.get("g6")) {
-            landkreisObjectId = Number.parseInt(url.searchParams.get("g6"));
-        }
+        /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel ROT */
+        var grenzwertIntensivBehandlung = 600; //Bayern = 600
+        
+        /** Eingabe des Grenzwertes für 7-Tage Inzidenz im LANDKREIS (siehe landkreisObjectId). Ab diesem Wert gilt die 3G-Regel */
+        var grenzwertInzidenz = 35;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Ab hier keine Aenderungen mehr erforderlich
+        var hospitalisierteFaelle = 0;
+        var faelleCovidAktuell = 0;
+        var format = 'json';
 
         //** DEFAULT WERTE IN AMPEL SETZEN */
         document.getElementById("anzeigeAmpelGrenzwertHospitalisierung").innerHTML ="Grenzwert: " + grenzwertHospitalisierung + "&nbsp;";
         document.getElementById("anzeigeAmpelGrenzwertIntensiv").innerHTML ="Grenzwert: " + grenzwertIntensivBehandlung + "&nbsp;";
         //** DEFAULT WERTE ENDE */
 
-
-
-        // Ab hier keine Aenderung erforderlich
         var HttpClient = function() {
             this.get = function(request, callback) {
                 var httpRequest = new XMLHttpRequest();
