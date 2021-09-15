@@ -1,0 +1,227 @@
+.ampelFarbeRot {
+    color: red;
+}
+.ampelFarbeGelb {
+    color: yellow;
+}
+.ampelFarbeGruen {
+    color: limegreen;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.ampelBox {
+    display: block;            
+    text-align:center;
+    padding: 0px; 
+    margin-left: 0px; 
+    padding-left: 10px;
+    margin-top: 20px; 
+    padding-right: 10px;
+    padding-top: 20px;
+    margin-bottom: 20px; 
+    border: 8px solid #c90024;
+}
+
+.rahmenlos {
+    border:none !important;
+}
+
+.container_balken {
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    height:80px;
+    margin-top:20px;
+}
+
+.balken_hospitalisierte_faelle{
+    width: 90%;
+    height: 20px;
+    position: relative;
+    background-image: linear-gradient(90deg, limegreen 66%, yellow 66%);
+}
+
+.balken_intensivmedizinisch {
+    width: 90%;
+    height: 20px;
+    position: relative;
+    background-image: linear-gradient(90deg, limegreen 66%, red 66%);
+
+}
+/** (grauer) Grenzwert Balken */
+.grenzwert {
+    width:66%;
+    border-right: 2px solid; 
+    border-right-color: grey; 
+    height:40px;
+    text-align:right;
+    float: left;
+    margin-top: -20px;
+}
+
+/** Grenzwert Balken Text (bpsw. Grenzwert: 1200) */
+.grenzwert .grenzwertText {
+    display: flex; 
+    justify-content: flex-end;
+    align-items: flex-start; /*flex-end; */
+    height:100%; 
+    color:grey;
+    font-size:smaller;
+}
+
+.balkenFarbtext {
+    float: right;
+    padding-right:10px;
+    font-size: smaller;
+    color: #000;
+    visibility: hidden;
+}
+
+.aktuellerWert {
+    height: 50px;
+    z-index: 1;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: 10px;    
+}
+
+.aktuellerWert .zeiger #aktuellerWertHospitalisierung #aktuellerWertIntensivmedizinisch {
+    width: 50px;
+    border: 1px solid;
+    padding: 3px;
+    background: #fff;
+    margin-bottom: 5px;
+    margin-right: -30px;
+    margin-top: 30px;
+    font-weight: 700;
+    /* display: inline-table; */
+    text-align: center;    
+}
+
+.zeiger_container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.zeiger {
+    width: 0px;
+    -webkit-transform: rotate(360deg);
+    border-style: solid;
+    border-width: 0 15px 30px 15px;
+    border-color: transparent transparent gray transparent;
+}
+
+.ampelIndikatorenHeader {
+    font-size: larger;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.ampelIndikatorenText {
+    font-weight: 500;
+    color: #5c5c5c;
+}
+
+/** Automatische Anzeige des Zeigers */
+#divHospitalisierungBreite {
+    width: 33%;
+}
+
+/** Automatische Anzeige des Zeigers */
+#divBehandlungBreite {
+    width: 33%;
+}
+
+.ampelwrapper {
+    /*margin-left: 15px;
+    margin-right: 15px;*/
+}
+.ampelrot {
+    background-color: red;
+    box-shadow: 0 0 40px red;
+    width: 150px;
+    height: 150px;
+    border: 0.5px solid black;
+    text-align: center;
+    border-radius: 75px;
+    display: inline-block;
+}
+  .ampelgelb {
+    background-color: yellow;
+    box-shadow: 0 0 40px yellow;
+    width: 150px;
+    height: 150px;
+    border: 0.5px solid black;
+    text-align: center;
+    border-radius: 75px;
+    display: inline-block;
+}
+
+.ampelgelb .ampeltext {
+    color: black !important;
+}
+
+.ampelgruen {
+    background-color: limegreen;
+    box-shadow: 0 0 40px limegreen;
+    width: 150px;
+    height: 150px;
+    border: 0.5px solid black;
+    text-align: center;
+    border-radius: 75px;
+    display: inline-block;
+}
+
+.noopacity {
+    opacity: 1 !important;
+    color: #000 !important;
+}
+
+.ampeltext {
+    display:flex;
+    height: 100%;
+    opacity: 0.4;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    color:#fff;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 2em;
+    text-transform: uppercase;
+}
+.ampelzusatztext {
+    display: inline-block;
+    font-size: large;
+    font-weight: 700;
+    text-transform: uppercase;
+    color:#000;
+    padding-top: 10px;
+}
+.anzeigeFaelleCovidAktuell {
+    font-weight: 700;
+    color: gray;
+}
+.anzeigeHospitalisierteFaelle {
+    font-weight: 700;
+    color: gray;
+}
+
+.fussnote {
+    font-style: italic;
+    font-size:smaller;
+}
