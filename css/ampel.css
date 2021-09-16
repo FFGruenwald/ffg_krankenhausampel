@@ -27,6 +27,7 @@
     padding-top: 20px;
     margin-bottom: 20px; 
     border: 8px solid #c90024;
+    font-size: 18px;
 }
 
 .rahmenlos {
@@ -38,7 +39,7 @@
     width:100%;
     text-align:center;
     height:80px;
-    margin-top:20px;
+    margin-top:30px;
 }
 
 .balken_hospitalisierte_faelle{
@@ -73,7 +74,7 @@
     align-items: flex-start; /*flex-end; */
     height:100%; 
     color:grey;
-    font-size:smaller;
+    font-size:11pt;
 }
 
 .balkenFarbtext {
@@ -133,6 +134,7 @@
 .ampelIndikatorenText {
     font-weight: 500;
     color: #5c5c5c;
+    font-size:smaller;
 }
 
 /** Automatische Anzeige des Zeigers */
@@ -236,6 +238,11 @@
 .colLeft{
     float:left;
     width: 40%;
+    padding-right: 15px;
+}
+
+.col50P {
+    width:50%;
 }
 
 #anzeige7TageInzidenzWert {
