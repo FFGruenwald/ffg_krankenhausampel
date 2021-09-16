@@ -1,0 +1,80 @@
+       var bundesland = 'by';
+        client = new HttpClient();
+        restServiceUrl = 'https://ffg.isardomains.com/corona/rest_lglwerte.php?bl=' + bundesland;
+        console.log(restServiceUrl);
+        client.get(restServiceUrl, function(response) {
+            var result = JSON.parse(response);
+            console.log(result);
+
+            var datenstandLGL = "";
+            var datenstandDIVI = "";
+            
+            faelleCovidAktuell = result["intensiv"];
+            hospitalisierteFaelle = result["hospitalisierung"];
+            inzidenz7TageHospitalisierung = result["hospitalisierung_inzidenz"];
+            if(result["datenstand_lgl"]) {
+                datenstandLGL = result["datenstand_lgl"];
+            }
+            if(result["datenstand_divi"]) {
+                datenstandDIVI = result["datenstand_divi"];
+            }
+
+            var anzeigeFaelleCovidAktuell= document.querySelectorAll('[class="anzeigeFaelleCovidAktuell"]');
+            for(var i = 0; i < anzeigeFaelleCovidAktuell.length; i++) {
+                anzeigeFaelleCovidAktuell[i].innerHTML = faelleCovidAktuell;
+            }
+            var anzeigeHospitalisierteFaelle= document.querySelectorAll('[class="anzeigeHospitalisierteFaelle"]');
+            for(var i = 0; i < anzeigeHospitalisierteFaelle.length; i++) {
+                anzeigeHospitalisierteFaelle[i].innerHTML = hospitalisierteFaelle;
+            }
+            var anzeigeLetztesUpdateDIVI= document.querySelectorAll('[class="anzeigeLetztesUpdateDIVI"]');
+            for(var i = 0; i < anzeigeLetztesUpdateDIVI.length; i++) {
+                anzeigeLetztesUpdateDIVI[i].innerHTML = datenstandDIVI;
+            }
+
+            var anzeigeLetztesUpdateLGL= document.querySelectorAll('[class="anzeigeLetztesUpdateLGL"]');
+            for(var i = 0; i < anzeigeLetztesUpdateLGL.length; i++) {
+                anzeigeLetztesUpdateLGL[i].innerHTML = datenstandLGL;
+            }
+
+            /** Anzeige der 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) | id=anzeige7TageInzidenzHospitalisierung */
+            //inzidenz7TageHospitalisierung = Math.round((hospitalisierteFaelle / 130.8) * 100) / 100; 
+            document.getElementById("anzeige7TageInzidenzHospitalisierung").innerHTML = inzidenz7TageHospitalisierung;
+            
+            /** Ampelfarbe setzen (rot schlaegt gelb...) */
+            cssClassAmpelfarbe = "ampelgruen"; //default gruen
+            //cssAmpeltextfarbe = "#fff"; //wenn Gelb, kann man den weissen Text in der Ampel nicht mehr lesen... in dem Fall auf dunklere Farbe setzen
+            ampelfarbeText = "Gr&uuml;n";
+    
+            if(hospitalisierteFaelle >= grenzwertHospitalisierung) {
+                cssClassAmpelfarbe ="ampelgelb";
+                //cssAmpeltextfarbe = "#000";
+                ampelfarbeText = "Gelb";
+            }
+            if (faelleCovidAktuell >= grenzwertIntensivBehandlung) {
+                cssClassAmpelfarbe ="ampelrot";
+                //cssAmpeltextfarbe = "#fff";
+                ampelfarbeText = "Rot";
+            }
+    
+            document.getElementById("ampeltext").setAttribute("style", "display:flex;");
+            document.getElementById("ampelfarbe").setAttribute("class", cssClassAmpelfarbe);
+            document.getElementById("ampeltext").innerHTML = ampelfarbeText;
+    
+            /** Berechne Zeigerstellung  (#divHospitalisierungBreite) */
+            var zeigerStellung = 0;
+            zeigerStellung = Math.round((hospitalisierteFaelle * 67) / grenzwertHospitalisierung);
+            if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
+            if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
+    
+            document.getElementById("divHospitalisierungBreite").setAttribute("style","width:" + zeigerStellung + "%");
+    
+            /** Berechne Zeigerstellung  (#divBehandlungBreite) */
+            zeigerStellung = 0;
+            zeigerStellung = Math.round((faelleCovidAktuell * 67) / grenzwertIntensivBehandlung);
+            if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
+            if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
+    
+            document.getElementById("divBehandlungBreite").setAttribute("style","width:" + zeigerStellung + "%");
+    
+        });

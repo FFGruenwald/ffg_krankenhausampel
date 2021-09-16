@@ -225,3 +225,21 @@
     font-style: italic;
     font-size:smaller;
 }
+
+/** Branch weiden */ 
+.ampelBox .row {
+    flex-wrap: unset !important;
+    margin: unset;
+    padding-left: 30px;
+}
+
+.colLeft{
+    float:left;
+    width: 40%;
+}
+
+#anzeige7TageInzidenzWert {
+    background-color: #dbdbdb;
+    font-weight: bold;
+    color: #000;
+}
