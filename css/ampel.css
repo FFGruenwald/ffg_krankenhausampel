@@ -233,6 +233,7 @@
     flex-wrap: unset !important;
     margin: unset;
     padding-left: 30px;
+    display: unset !important;
 }
 
 .colLeft{
