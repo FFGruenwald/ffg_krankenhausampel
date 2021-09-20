@@ -129,12 +129,14 @@
     font-size: larger;
     font-weight: 700;
     margin-top: 10px;
+	text-align: left;
 }
 
 .ampelIndikatorenText {
     font-weight: 500;
     color: #5c5c5c;
     font-size:smaller;
+	text-align: left;
 }
 
 /** Automatische Anzeige des Zeigers */
@@ -214,6 +216,13 @@
     color:#000;
     padding-top: 10px;
 }
+
+.anzeige7TageInzidenzWert {
+	background-color: #dbdbdb;
+    font-weight: bold;
+    color: #000;
+}
+
 .anzeigeFaelleCovidAktuell {
     font-weight: 700;
     color: gray;
@@ -244,10 +253,4 @@
 
 .col50P {
     width:50%;
-}
-
-#anzeige7TageInzidenzWert {
-    background-color: #dbdbdb;
-    font-weight: bold;
-    color: #000;
 }

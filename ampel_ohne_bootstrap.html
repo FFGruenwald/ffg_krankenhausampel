@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krankenhaus-Ampel (krankenhausampel.info)</title>
+    <link rel="stylesheet" href="css/ampel.css"> <!-- Einbinden der benoetigten Stylesheet-Information fuer die Ampel -->
+
+    <!--+ 
+        | Einbinden des angepassten Bootstrap-Grid-Frameworks:
+        +-->  
+      <link rel="stylesheet" href="css/bootstrap-grid_ampel.min.css">
+
+  </head>
+  <body>
+
+	<div class="ampelBox" id="ampelBox">
+		<div class="khacontainer">
+				<div class="kharow">
+					<div class="khacol">
+						<div style="display:block;text-align: center;">
+							<h2>COVID-19 Krankenhaus-Ampel für Bayern</h2>
+						</div>
+					</div>
+				</div>        
+				<div class="kharow" style="margin-top:20px;">
+					<div class="khacol-xs-12 khacol-sm-4 khacol-lg-3 align-items-center">
+						<div class="ampelcontainer">
+							<div class="ampelwrapper">
+								<div id="ampelfarbe" class="ampelgruen">                        
+									<div class="ampeltext" id="ampeltext">Grün</div>
+								</div>
+							</div>
+							<div class="ampelzusatztext" id="ampelzusatztext" title="3G = Genesen, Geimpft, Getestet">+ 3G-Regel</div>
+						</div>
+					</div>
+					<div class="khacol-xs-12 khacol-sm-8 khacol-lg-9">
+							<div class="kharow">
+								<div class="khacol">
+									<div id="7TageInzidenzText" style="text-align: left;">
+										Die 7-Tages-Inzidenz im <span id="anzeigeLandkreisname"></span> beträgt <span id="anzeige7TageInzidenzWert" class="anzeige7TageInzidenzWert"></span><sup>1</sup>.
+										<span id="hinweis3GRegel">Ab einem Inzidenzwert von <span id="anzeigeGrenzeInzidenzWert3G"></span> gilt in geschlossenen Räumen der 3G-Grundsatz: Genesen, Geimpft, Getestet (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).</span>
+										<br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) beträgt bayernweit: <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>2)</sup>
+									</div>
+								</div>
+							</div>
+							<div class="kharow">
+								<div class="khacol text-left">
+									<div class="ampelIndikatorenHeader">Ampel-Indikatoren:</div>
+								</div>
+							</div>
+							<div class="kharow" style="margin-top:10px;">                              
+								<div class="khacol-xs-12 khacol-sm-12 khacol-lg-6 text-left">
+									<div class="ampelIndikatorenText">Hospitalisierte Fälle der letzten 7 Tage<sup>2</sup>:</div>
+									<div class="container_balken">
+										<div id="balken_hospitalisierte_faelle" class="balken_hospitalisierte_faelle">
+											<div class="grenzwert">
+												<div class="grenzwertText" id="anzeigeAmpelGrenzwertHospitalisierung">Grenzwert: 1200</div>
+											</div>                                                        
+											<div class="balkenFarbtext" id="balkenFarbeGelb">Gelb</div>
+											<div class="aktuellerWert" id="divHospitalisierungBreite"> 
+												<div class="zeiger_container">
+													<div class="zeiger"></div>
+													<span id="aktuellerWertHospitalisierung" title="Hospitalisierte Fälle der letzten 7 Tage"><span class="anzeigeHospitalisierteFaelle">LGL Wert</span></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div style="clear:both;"></div>
+								</div>
+
+								<div class="khacol-xs-12 khacol-sm-12 khacol-lg-6 text-left">
+									<div class="ampelIndikatorenText">Fälle in intensivmedizinischer Behandlung<sup>3</sup>:</div>
+									<div class="container_balken">
+										<div id="balken_intensivmedizinisch" class="balken_intensivmedizinisch">
+											<div class="grenzwert">
+												<div class="grenzwertText" id="anzeigeAmpelGrenzwertIntensiv">Grenzwert: 600</div>
+											</div>
+											<div class="balkenFarbtext" id="balkenFarbeRot">Rot</div>
+											<div class="aktuellerWert" id="divBehandlungBreite"> 
+												<div class="zeiger_container">
+													<div class="zeiger"></div>
+													<span id="aktuellerWertIntensivmedizinisch" title="Fälle in intensivmedizinischer Behandlung:"><span class="anzeigeFaelleCovidAktuell">DIVI Wert</span></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div style="clear:both;"></div>
+								</div>
+							</div>                
+					</div>
+				</div>
+				<div class="kharow" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;">
+					<div class="khacol">            
+						<sup>1)</sup><span class="fussnote">Stand: <span class="anzeigeLetztesUpdateRKI"></span> (Robert-Koch-Institut (RKI), <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank" title="Lizenz: Datenlizenz Deutschland – Namensnennung – Version 2.0">dl-de/by-2-0</a>)</span>
+						<sup>2)</sup><span class="fussnote">Stand:  <span class="anzeigeLetztesUpdateLGL"></span> (<a href="https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm" target="_blank" title="Link zu LGL Bayern">LGL Bayern</a>)</span> 
+						<sup>3)</sup><span class="fussnote">Stand:  <span class="anzeigeLetztesUpdateDIVI"></span> (<a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">Intensivregister.de</a>)</span> 
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+     <!--+
+        | Benoetigtes JavaScript muss nach dem HTML-Teil eingebunden werden, da beim Seitenaufbau die HTML-Elemente, 
+        | auf die im Script zugegriffen wird, noch nicht existieren.
+        +-->
+    <script src="js/ampel.js"></script>
+
+
+    <footer class="bg-light text-center text-lg-start">
+      <div class="text-center p-3">
+          Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
+      </div>
+  </footer> 
+  </body>
+</html>
