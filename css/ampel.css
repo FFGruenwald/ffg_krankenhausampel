@@ -9,11 +9,11 @@
 }
 
 .hidden {
-    visibility: hidden;
+    visibility: hidden !important;
 }
 
 .visible {
-    visibility: visible;
+    visibility: visible !important;
 }
 
 .ampelBox {
@@ -211,6 +211,11 @@
     text-transform: uppercase;
     color:#000;
     padding-top: 10px;
+}
+.anzeige7TageInzidenzWert {
+	background-color: #dbdbdb;
+    font-weight: bold;
+    color: #000;
 }
 .anzeigeFaelleCovidAktuell {
     font-weight: 700;
