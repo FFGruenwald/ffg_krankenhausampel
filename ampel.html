@@ -41,7 +41,7 @@
                               <div id="7TageInzidenzText" style="text-align: left;">
                                   Die 7-Tages-Inzidenz im <span id="anzeigeLandkreisname"></span> betr&auml;gt <span id="anzeige7TageInzidenzWert" class="anzeige7TageInzidenzWert"></span><sup>1</sup>.
                                   <span id="hinweis3GRegel">Ab einem Inzidenzwert von <span id="anzeigeGrenzeInzidenzWert3G"></span> gilt in geschlossenen R&auml;umen der 3G-Grundsatz: Genesen, Geimpft, Getestet (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).</span>
-                                  <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt bayernweit: <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>2)</sup>
+                                  <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt bayernweit: <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>2)</sup>.
                               </div>
                           </div>
                       </div>
@@ -90,11 +90,19 @@
                       </div>                
               </div>
           </div>
+		<!--+
+			| !!!!!
+			| !! Die Quellangaben der verwendeten Zahlen MUESSEN erhalten und ersichtlich bleiben. Insbesondere zum RKI und DIVI sind die Angaben nicht nur  
+			| !! zwingend erforderlich, um die Daten nutzen zu koennen, sondern sie muessen auch noch in einem vorgegebenen Format angezeigt werden.
+			| !! Die Angaben muessen aber nicht zwangslaeufig unter der Ampel stehen, sie koennen auch an einer anderen bliebigen Stelle der Webseite angezeigt 
+			| !! werden, sofern eben die Zuordnung erkennbar bleibt.
+			| !!!!!
+			+-->
           <div class="row" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;">
               <div class="col">            
-                  <sup>1)</sup><span class="fussnote">Stand: <span class="anzeigeLetztesUpdateRKI"></span> (Robert-Koch-Institut (RKI), <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank" title="Lizenz: Datenlizenz Deutschland – Namensnennung – Version 2.0">dl-de/by-2-0</a>)</span>
-                  <sup>2)</sup><span class="fussnote">Stand:  <span class="anzeigeLetztesUpdateLGL"></span> (<a href="https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm" target="_blank" title="Link zu LGL Bayern">LGL Bayern</a>)</span> 
-                  <sup>3)</sup><span class="fussnote">Stand:  <span class="anzeigeLetztesUpdateDIVI"></span> (<a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">Intensivregister.de</a>)</span> 
+                  <sup>1)</sup><span class="fussnote">Robert-Koch-Institut (RKI), <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank" title="Lizenz: Datenlizenz Deutschland – Namensnennung – Version 2.0">dl-de/by-2-0</a> (Stand: <span class="anzeigeLetztesUpdateRKI"></span>)</span>
+                  <sup>2)</sup><span class="fussnote"><a href="https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm" target="_blank" title="Link zu LGL Bayern">LGL Bayern</a> (Stand: <span class="anzeigeLetztesUpdateLGL"></span>)</span> 
+                  <sup>3)</sup><span class="fussnote">DIVI-Intensivregister (<a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">www.intensivregister.de</a>) (Stand: <span class="anzeigeLetztesUpdateDIVI"></span>)</span> 
               </div>
           </div>
           <div style="clear:both;"></div>
@@ -102,12 +110,14 @@
     </div>   
     <!--+
         | Benoetigtes JavaScript muss nach dem HTML-Teil eingebunden werden, da beim Seitenaufbau die HTML-Elemente, 
-        | auf die im Script zugegriffen wird, noch nicht existieren.
+        | auf die im Script zugegriffen wird, evtl. noch nicht existieren koennen.
         +-->
     <script src="js/ampel.js"></script>
 
 
-
+    <!--+
+        | Der <footer> kann entfernt werden, er dient nur der Vollstaendigkeit. 
+        +-->
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-3">
           Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
