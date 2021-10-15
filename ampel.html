@@ -41,7 +41,7 @@
                               <div id="7TageInzidenzText" style="text-align: left;">
                                   Die 7-Tages-Inzidenz im <span id="anzeigeLandkreisname"></span> betr&auml;gt <span id="anzeige7TageInzidenzWert" class="anzeige7TageInzidenzWert"></span><sup>1</sup>.
                                   <span id="hinweis3GRegel">Ab einem Inzidenzwert von <span id="anzeigeGrenzeInzidenzWert3G"></span> gilt in geschlossenen R&auml;umen der 3G-Grundsatz: Genesen, Geimpft, Getestet (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).</span>
-                                  <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt bayernweit: <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>2)</sup>.
+                                  <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt bayernweit: <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>1</sup>.
                               </div>
                           </div>
                       </div>
@@ -52,7 +52,7 @@
                       </div>
                       <div class="row" style="margin-top:10px;">                              
                           <div class="col-xs-12 col-sm-12 col-lg-6 text-left">
-                              <div class="ampelIndikatorenText" style="text-align: left;">Hospitalisierte F&auml;lle der letzten 7 Tage<sup>2</sup>:</div>
+                              <div class="ampelIndikatorenText" style="text-align: left;">Hospitalisierte F&auml;lle der letzten 7 Tage<sup>1</sup>:</div>
                               <div class="container_balken">
                                   <div id="balken_hospitalisierte_faelle" class="balken_hospitalisierte_faelle">
                                       <div class="grenzwert">
@@ -62,7 +62,7 @@
                                       <div class="aktuellerWert" id="divHospitalisierungBreite"> 
                                           <div class="zeiger_container">
                                               <div class="zeiger"></div>
-                                              <span id="aktuellerWertHospitalisierung" title="Hospitalisierte F&auml;lle der letzten 7 Tage"><span class="anzeigeHospitalisierteFaelle">LGL Wert</span></span>
+                                              <span id="aktuellerWertHospitalisierung" title="Hospitalisierte F&auml;lle der letzten 7 Tage"><span class="anzeigeHospitalisierteFaelle">RKI Wert</span></span>
                                           </div>
                                       </div>
                                   </div>
@@ -70,7 +70,7 @@
                               <div style="clear:both;"></div>
                           </div>
                           <div class="col-xs-12 col-sm-12 col-lg-6 text-left">
-                              <div class="ampelIndikatorenText" style="text-align: left;">F&auml;lle in intensivmedizinischer Behandlung<sup>3</sup>:</div>
+                              <div class="ampelIndikatorenText" style="text-align: left;">F&auml;lle in intensivmedizinischer Behandlung<sup>2</sup>:</div>
                               <div class="container_balken">
                                   <div id="balken_intensivmedizinisch" class="balken_intensivmedizinisch">
                                       <div class="grenzwert">
@@ -99,10 +99,9 @@
 			| !!!!!
 			+-->
           <div class="row" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;">
-              <div class="col">            
+              <div class="col">
                   <sup>1)</sup><span class="fussnote">Robert-Koch-Institut (RKI), <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank" title="Lizenz: Datenlizenz Deutschland – Namensnennung – Version 2.0">dl-de/by-2-0</a> (Stand: <span class="anzeigeLetztesUpdateRKI"></span>)</span>
-                  <sup>2)</sup><span class="fussnote"><a href="https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/karte_coronavirus/index.htm" target="_blank" title="Link zu LGL Bayern">LGL Bayern</a> (Stand: <span class="anzeigeLetztesUpdateLGL"></span>)</span> 
-                  <sup>3)</sup><span class="fussnote">DIVI-Intensivregister (<a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">www.intensivregister.de</a>) (Stand: <span class="anzeigeLetztesUpdateDIVI"></span>)</span> 
+                  <sup>2)</sup><span class="fussnote">DIVI-Intensivregister (<a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">www.intensivregister.de</a>) (Stand: <span class="anzeigeLetztesUpdateDIVI"></span>)</span> 
               </div>
           </div>
           <div style="clear:both;"></div>
@@ -118,6 +117,12 @@
     <!--+
         | Der <footer> kann entfernt werden, er dient nur der Vollstaendigkeit. 
         +-->
+		<div class="row mb-5" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;color:red;">
+			<div class="col">
+			F&uuml;r Landkreise au&szlig;erhalb Bayerns m&uuml;ssen die Grenzwerte der Ampel-Indikatoren in Zeile 6 und Zeile 9 im Quellcode des <a href="./js/ampel.js" target="_blank" title="">JavaScripts (/js/ampel.js)</a> angepasst werden!
+			</div>
+		</div>
+	
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-3">
           Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
