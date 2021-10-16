@@ -42,7 +42,7 @@
                 client.get(restServiceUrl, function(response) {
                     var jsonLandkreis = JSON.parse(response);
                     jsonLandkreis = jsonLandkreis['features'][0]['attributes'];
-                    console.log(jsonLandkreis);
+                    //console.log(jsonLandkreis);
                     //Name des Bundeslandes
                     var bundeslandId = jsonLandkreis['BL_ID'];
     
@@ -84,7 +84,7 @@
                     var nRestServiceUrl = 'https://krankenhausampel.info/corona/?bl_id=' + bundeslandId;
                     nClient.get(nRestServiceUrl, function(response1) {
                         var result = JSON.parse(response1);
-                        console.log('Result: ' + result);
+                        //console.log('Result: ' + result);
                         var datenstandLGL = "";
                         var datenstandDIVI = "";
                         
@@ -115,7 +115,17 @@
                         for(var i = 0; i < anzeigeLetztesUpdateLGL.length; i++) {
                             anzeigeLetztesUpdateLGL[i].innerHTML = datenstandLGL;
                         }
-        
+
+                        var anzeigeBundeslandName= document.querySelectorAll('[class="anzeigeBundeslandName"]');
+                        for(var i = 0; i < anzeigeBundeslandName.length; i++) {
+                            anzeigeBundeslandName[i].innerHTML = result['bundesland_name'];
+                        }
+
+                        var anzeigeBundeslandAdverb= document.querySelectorAll('[class="anzeigeBundeslandAdverb"]');
+                        for(var i = 0; i < anzeigeBundeslandAdverb.length; i++) {
+                            anzeigeBundeslandAdverb[i].innerHTML = result['bundesland_name_adverb'];
+                        }
+
                         /** Anzeige der 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) | id=anzeige7TageInzidenzHospitalisierung */
                         //inzidenz7TageHospitalisierung = Math.round((hospitalisierteFaelle / 130.8) * 100) / 100; 
                         document.getElementById("anzeige7TageInzidenzHospitalisierung").innerHTML = inzidenz7TageHospitalisierung;
