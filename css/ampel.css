@@ -8,11 +8,11 @@
     color: limegreen;
 }
 
-.hidden {
+.farbnameUnsichtbar {
     visibility: hidden !important;
 }
 
-.visible {
+.farbnameSichtbar {
     visibility: visible !important;
 }
 
@@ -185,7 +185,7 @@
     display: inline-block;
 }
 
-.noopacity {
+.farbnameVolleDeckkraft {
     opacity: 1 !important;
     color: #000 !important;
 }
