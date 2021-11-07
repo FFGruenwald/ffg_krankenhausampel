@@ -32,7 +32,7 @@
                               <div class="ampeltext" id="ampeltext">Gr&uuml;n</div>
                           </div>
                       </div>
-                      <div class="ampelzusatztext" id="ampelzusatztext" title="3G = Genesen, Geimpft, Getestet">+ 3G-Regel</div>
+                      <div class="ampelzusatztext" id="ampelzusatztext" title=""></div>
                   </div>
               </div>
               <div class="col-xs-12 col-sm-8 col-lg-9">
@@ -55,7 +55,7 @@
                               <div class="ampelIndikatorenText" style="text-align: left;">Hospitalisierte F&auml;lle der letzten 7 Tage<sup>1</sup>:</div>
                               <div class="container_balken">
                                   <div id="balken_hospitalisierte_faelle" class="balken_hospitalisierte_faelle">
-                                      <div class="grenzwert">
+                                      <div class="grenzwert_gelb">
                                           <div class="grenzwertText" id="anzeigeAmpelGrenzwertHospitalisierung">Grenzwert: 1200</div>
                                       </div>                                                        
                                       <div class="balkenFarbtext" id="balkenFarbeGelb">Gelb</div>
@@ -73,16 +73,20 @@
                               <div class="ampelIndikatorenText" style="text-align: left;">F&auml;lle in intensivmedizinischer Behandlung<sup>2</sup>:</div>
                               <div class="container_balken">
                                   <div id="balken_intensivmedizinisch" class="balken_intensivmedizinisch">
-                                      <div class="grenzwert">
-                                          <div class="grenzwertText" id="anzeigeAmpelGrenzwertIntensiv">Grenzwert: 600</div>
-                                      </div>
-                                      <div class="balkenFarbtext" id="balkenFarbeRot">Rot</div>
-                                      <div class="aktuellerWert" id="divBehandlungBreite"> 
-                                          <div class="zeiger_container">
-                                              <div class="zeiger"></div>
-                                              <span id="aktuellerWertIntensivmedizinisch" title="F&auml;lle in intensivmedizinischer Behandlung:"><span class="anzeigeFaelleCovidAktuell">DIVI Wert</span></span>
-                                          </div>
-                                      </div>
+                                        <div class="grenzwert_gelb">
+                                            <div class="grenzwertText" id="anzeigeAmpelGrenzwertIntensivGelb">Grenzwerte: 450</div>
+                                        </div>
+                                        <div class="grenzwert_rot">
+                                            <div class="grenzwertText" id="anzeigeAmpelGrenzwertIntensivRot">600</div>
+                                            <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeGelb">Gelb</div>
+                                        </div>
+                                        <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeRot">Rot</div>
+                                        <div class="aktuellerWert" id="divBehandlungBreite"> 
+                                            <div class="zeiger_container">
+                                                <div class="zeiger"></div>
+                                                <span id="aktuellerWertIntensivmedizinisch" title="F&auml;lle in intensivmedizinischer Behandlung:"><span class="anzeigeFaelleCovidAktuell">DIVI Wert</span></span>
+                                            </div>
+                                        </div>
                                   </div>
                               </div>
                               <div style="clear:both;"></div>

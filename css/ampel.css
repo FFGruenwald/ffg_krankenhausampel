@@ -52,12 +52,12 @@
     width: 90%;
     height: 20px;
     position: relative;
-    background-image: linear-gradient(90deg, limegreen 66%, red 66%);
+    background-image: linear-gradient(90deg, limegreen 33%, yellow 33%, yellow 66%, red 66%);
 
 }
-/** (grauer) Grenzwert Balken */
-.grenzwert {
-    width:66%;
+
+/** Grenzwert Gelb Balken */
+.grenzwert_gelb {
     border-right: 2px solid; 
     border-right-color: grey; 
     height:40px;
@@ -66,8 +66,35 @@
     margin-top: -20px;
 }
 
+/** Grenzwert Rot Balken Intensivmedizinische Faelle */
+.grenzwert_rot {
+    width:33%;
+    border-right: 2px solid; 
+    border-right-color: grey; 
+    height:40px;
+    text-align:right;
+    float: left;
+    margin-top: -20px;
+}
+
+#balken_hospitalisierte_faelle .grenzwert_gelb {
+    width:66%;
+}
+
+#balken_intensivmedizinisch .grenzwert_gelb {
+    width:33%;
+}
+
 /** Grenzwert Balken Text (bpsw. Grenzwert: 1200) */
-.grenzwert .grenzwertText {
+.grenzwert_rot .grenzwertText {
+    display: flex; 
+    justify-content: flex-end;
+    align-items: flex-start; /*flex-end; */
+    /*height:100%;*/ 
+    color:grey;
+    font-size:smaller;
+}
+.grenzwert_gelb .grenzwertText {
     display: flex; 
     justify-content: flex-end;
     align-items: flex-start; /*flex-end; */

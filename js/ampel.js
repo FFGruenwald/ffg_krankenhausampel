@@ -5,8 +5,11 @@
             /** Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB */
             var grenzwertHospitalisierung = 1200; //Bayern = 1200
     
+            /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel GELB */
+            var grenzwertIntensivBehandlungGelb = 450; //Bayern = 450
+
             /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel ROT */
-            var grenzwertIntensivBehandlung = 600; //Bayern = 600
+            var grenzwertIntensivBehandlungRot = 600; //Bayern = 600
             
             /** Eingabe des Grenzwertes für 7-Tage Inzidenz im LANDKREIS (siehe landkreisObjectId). Ab diesem Wert gilt die 3G-Regel */
             var grenzwertInzidenz = 35;
@@ -19,7 +22,8 @@
     
             //** DEFAULT WERTE IN AMPEL SETZEN */
             document.getElementById("anzeigeAmpelGrenzwertHospitalisierung").innerHTML ="Grenzwert: " + grenzwertHospitalisierung + "&nbsp;";
-            document.getElementById("anzeigeAmpelGrenzwertIntensiv").innerHTML ="Grenzwert: " + grenzwertIntensivBehandlung + "&nbsp;";
+            document.getElementById("anzeigeAmpelGrenzwertIntensivGelb").innerHTML ="Grenzwerte: " + grenzwertIntensivBehandlungGelb + "&nbsp;";
+            document.getElementById("anzeigeAmpelGrenzwertIntensivRot").innerHTML = grenzwertIntensivBehandlungRot + "&nbsp;";
             //** DEFAULT WERTE ENDE */
     
             var HttpClient = function() {
@@ -81,10 +85,10 @@
     
                     //muss verschachtelt werden, da wir das Bundesland erst von der RKI API bekommen
                     var nClient = new HttpClient();
-                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/?bl_id=' + bundeslandId;
+                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/v2/?bl_id=' + bundeslandId;
+                    console.log('nRestServiceUrl: ' + nRestServiceUrl);
                     nClient.get(nRestServiceUrl, function(response1) {
                         var result = JSON.parse(response1);
-                        //console.log('Result: ' + result);
                         var datenstandLGL = "";
                         var datenstandDIVI = "";
                         
@@ -129,22 +133,32 @@
                         /** Anzeige der 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) | id=anzeige7TageInzidenzHospitalisierung */
                         //inzidenz7TageHospitalisierung = Math.round((hospitalisierteFaelle / 130.8) * 100) / 100; 
                         document.getElementById("anzeige7TageInzidenzHospitalisierung").innerHTML = inzidenz7TageHospitalisierung;
-                        
+                        var ampelzusatztext = "";
                         /** Ampelfarbe setzen (rot schlaegt gelb...) */
                         cssClassAmpelfarbe = "ampelgruen"; //default gruen
                         //cssAmpeltextfarbe = "#fff"; //wenn Gelb, kann man den weissen Text in der Ampel nicht mehr lesen... in dem Fall auf dunklere Farbe setzen
-                        ampelfarbeText = "Gr&uuml;n";
-                
+                        ampelfarbeText = "Gr&uuml;n";                        
                         if(hospitalisierteFaelle >= grenzwertHospitalisierung) {
                             cssClassAmpelfarbe ="ampelgelb";
                             //cssAmpeltextfarbe = "#000";
                             ampelfarbeText = "Gelb";
+                            ampelzusatztext = "3GPlus-Regel";
                         }
-                        if (faelleCovidAktuell >= grenzwertIntensivBehandlung) {
+                        if (faelleCovidAktuell >= grenzwertIntensivBehandlungGelb) {
+                            cssClassAmpelfarbe ="ampelgelb";
+                            //cssAmpeltextfarbe = "#fff";
+                            ampelfarbeText = "Gelb";
+                            ampelzusatztext = "3G<font style='text-transform:lowercase;'>Plus</font>-Regel";
+                        }
+                        if (faelleCovidAktuell >= grenzwertIntensivBehandlungRot) {
                             cssClassAmpelfarbe ="ampelrot";
                             //cssAmpeltextfarbe = "#fff";
                             ampelfarbeText = "Rot";
-                        }
+                            ampelzusatztext = "2G-Regel";
+                        }                        
+
+                        /** Zusatztext unter der Ampel je nach Ampelfarbe (2G, 3G, 3GPlus,...) */
+                        document.getElementById("ampelzusatztext").innerHTML = ampelzusatztext;
                 
                         document.getElementById("ampeltext").setAttribute("style", "display:flex;");
                         document.getElementById("ampelfarbe").setAttribute("class", cssClassAmpelfarbe);
@@ -160,7 +174,17 @@
                 
                         /** Berechne Zeigerstellung  (#divBehandlungBreite) */
                         zeigerStellung = 0;
-                        zeigerStellung = Math.round((faelleCovidAktuell * 67) / grenzwertIntensivBehandlung);
+                        /** Beruecksichtigung Prozentangaben bei Ampelfarbenbreite IntensivBehandlung */
+                        if(faelleCovidAktuell <= grenzwertIntensivBehandlungGelb) {
+                            zeigerStellung = Math.round((faelleCovidAktuell * 34) / grenzwertIntensivBehandlungGelb);    
+                        }
+                        if(faelleCovidAktuell > grenzwertIntensivBehandlungGelb && faelleCovidAktuell < grenzwertIntensivBehandlungRot) {
+                            zeigerStellung = Math.round( ((faelleCovidAktuell*100) / grenzwertIntensivBehandlungGelb) - 66);
+                        }
+                        if(faelleCovidAktuell >= grenzwertIntensivBehandlungRot) {
+                            zeigerStellung = Math.round((faelleCovidAktuell * 67) / grenzwertIntensivBehandlungRot);
+                        }
+                                
                         if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
                         if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
                 
