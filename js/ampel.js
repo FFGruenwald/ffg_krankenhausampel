@@ -1,6 +1,6 @@
-        /** Angabe des Gemeindeschluessels, aus dem der Landkreis ermittelt wird! Es genuegen die erste 5 Zahlen!
-            /** Gemeindeschluessel hier ermitteln: https://www.riserid.eu/data/user_upload/downloads/info-pdf.s/Diverses/Liste-Amtlicher-Gemeindeschluessel-AGS-2015.pdf */
-            var gemeindeSchluessel = '09184'; //die ersten 5 Zahlen des Gemeindeschluessels! Gemeinde Gruenwald, Landkreis Muenchen: 09184
+            /** Angabe des Gemeindeschlüssels, aus dem der Landkreis ermittelt wird! Es genügen die erste 5 Zahlen!
+            /** Gemeindeschlüssel hier ermitteln: https://www.riserid.eu/data/user_upload/downloads/info-pdf.s/Diverses/Liste-Amtlicher-Gemeindeschluessel-AGS-2015.pdf */
+            var gemeindeSchluessel = '09184'; //die ersten 5 Zahlen des Gemeindeschlüssels! Beispiel: Gemeinde Grünwald, Landkreis München: 09184
 
             /** Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB */
             var grenzwertHospitalisierung = 1200; //Bayern = 1200
@@ -41,6 +41,8 @@
             document.getElementById("hinweis2GRegel").style.display ="none";
             document.getElementById("hinweis3GRegel").style.display ="none";
             document.getElementById("hinweis3GplusRegel").style.display ="none";
+            document.getElementById("ampeltext").innerHTML = "";
+            document.getElementById("ampelfarbe").setAttribute("class", "ampelFarbeInitial");
             //** Ende: Default Werte setzen und Ampel initialisieren */
     
             var HttpClient = function() {
@@ -90,7 +92,7 @@
                     rkiLandkreisCOVID19FaelleLetzte7Tage        = landkreisDaten['casesPerWeek'];
                     rkiLandkreisCOVID19FaelleLetzte7TageTod     = landkreisDaten['deathsPerWeek'];
                     rkiLandkreisCOVID19FaelleGenesen            = landkreisDaten['recovered'];
-
+                    
                     //Setzen der ermittelten Werte fuer die Anzeige im HTML Teil.
                     // Name des Landkreises:  <span id="anzeigeLandkreisname"></span>
                     var lk = document.querySelectorAll('[class="anzeigeLandkreisname"]');

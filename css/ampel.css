@@ -7,6 +7,9 @@
 .ampelFarbeGruen {
     color: limegreen;
 }
+.ampelFarbeInitial {
+    color: lightgray;
+}
 
 .farbnameUnsichtbar {
     visibility: hidden !important;

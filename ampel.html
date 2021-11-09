@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krankenhaus-Ampel (krankenhausampel.info)</title>
+    <title>Krankenhaus-Ampel (krankenhausampel.info) - Beispieldarstellung</title>
     <link rel="stylesheet" href="css/ampel.css"> <!-- Einbinden der benoetigten Stylesheet-Information fuer die Ampel -->
 
     <!--+ 
@@ -29,7 +29,7 @@
                   <div class="ampelcontainer">
                       <div class="ampelwrapper">
                           <div id="ampelfarbe" class="ampelgruen">                        
-                              <div class="ampeltext" id="ampeltext">Gr&uuml;n</div>
+                              <div class="ampeltext farbnameVolleDeckkraft" id="ampeltext">Gr&uuml;n</div>
                           </div>
                       </div>
                       <div class="ampelzusatztext" id="ampelzusatztext" title=""></div>
@@ -41,16 +41,20 @@
                               <div id="7TageInzidenzText" style="text-align: left;">
                                   Die 7-Tages-Inzidenz im <span class="anzeigeLandkreisname"></span> betr&auml;gt <span id="anzeige7TageInzidenzWert" class="anzeige7TageInzidenzWert"></span><sup>1</sup>.
                                     <span id="hinweis3GRegel">
-                                        Ab einem Inzidenzwert von <span id="anzeigeGrenzeInzidenzWert3G"></span> gilt in geschlossenen R&auml;umen der 3G-Grundsatz: Genesen, Geimpft, Getestet (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
+                                        <!-- Text fuer die 3G-Regel, sobald 7-Tages-Inzidenz ueber Grenzwert (siehe Zeile 15 in js/ampel.js) steigt: -->
+                                        Ab einem Inzidenzwert von <span id="anzeigeGrenzeInzidenzWert3G"></span> gilt in geschlossenen R&auml;umen der 3G-Grundsatz: Genesen, Geimpft oder Getestet (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
                                     </span>
                                     <span id="hinweis3GplusRegel">
-                                        Die Krankenhausampel steht auf Gelb! Es gilt die 3Gplus-Regel in geschlossenen Räumen (Genesen, Geimpft und PCR-getestet), sowie eine FFP2-Maskenpflicht (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
+                                        <!-- Text fuer die 3Gplus-Regel: -->
+                                        Die Krankenhausampel steht auf Gelb! Es gilt die 3Gplus-Regel in geschlossenen Räumen (Genesen, Geimpft oder PCR-getestet), sowie eine FFP2-Maskenpflicht (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
                                     </span>
                                     <span id="hinweis2GRegel">
-                                        Die Krankenhausampel steht auf Rot! In der Gastronomie und f&uuml;r k&ouml;rpernahe Dienstleistungen gilt die 3Gplus-Regel: Genesen, Geimpft und PCR-getestet. F&uuml;r alle Veranstaltungen sowie Kultur & Sport gilt die 2G-Regel: Genesen, Geimpft (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
+                                        <!-- Text fuer die 2G-Regel: -->
+                                        Die Krankenhausampel steht auf Rot! In der Gastronomie und f&uuml;r k&ouml;rpernahe Dienstleistungen gilt die 3Gplus-Regel: Genesen, Geimpft oder PCR-getestet. F&uuml;r alle Veranstaltungen sowie Kultur & Sport gilt die 2G-Regel: Genesen oder Geimpft (<a href="https://coronavirus.bayern.de" target="_blank" title="www.coronavirus.bayern.de">weitere Informationen</a>).
                                     </span>              
                                     <span id="hinweisHotspot">
-                                        <br/><strong>Hotspot!</strong> Die Ampel steht auf Rot, da der <span class="anzeigeLandkreisname"></span> eine h&ouml;here 7-Tages-Inzidenz als 300 und eine Auslastung von mindestens 80% der verf&uuml;gbaren Intensivbetten hat.
+                                        <!-- Text fuer Hotspot Landkreis: -->
+                                        <br/><strong>Hotspot!</strong> Die Ampel steht auf Rot, da im <span class="anzeigeLandkreisname"></span> die 7-Tages-Inzidenz &uuml;ber 300 liegt und die Auslastung der Intensivbetten mehr als 80% begtr&auml;gt.
                                     </span>              
                                     <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt <span class="anzeigeBundeslandAdverb">bayernweit</span> <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>1</sup>.
                               </div>
@@ -131,17 +135,16 @@
 
     <!--+
         | Der <footer> kann entfernt werden, er dient nur der Vollstaendigkeit. 
-        +-->
-		<div class="row mb-5" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;color:red;">
-			<div class="col">
-			F&uuml;r Landkreise au&szlig;erhalb Bayerns m&uuml;ssen die Grenzwerte der Ampel-Indikatoren in Zeile 6 und Zeile 9 im Quellcode des <a href="./js/ampel.js" target="_blank" title="">JavaScripts (/js/ampel.js)</a> angepasst werden!
-			</div>
-		</div>
-	
+        +-->	
     <footer class="bg-light text-center text-lg-start">
-      <div class="text-center p-3">
-          Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
-      </div>
-  </footer> 
+        <div class="row mb-2" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;color:red;">
+            <div class="col">
+                F&uuml;r Landkreise au&szlig;erhalb Bayerns m&uuml;ssen die Grenzwerte der Ampel-Indikatoren in den Zeilen 6, 9 und 12 im Quellcode des <a href="./js/ampel.js" target="_blank" title="">JavaScripts (/js/ampel.js)</a> angepasst werden!
+            </div>
+        </div>
+        <div class="text-center p-3">
+            Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
+        </div>
+    </footer> 
   </body>
 </html>
