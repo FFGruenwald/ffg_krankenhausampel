@@ -60,12 +60,31 @@
             load(gemeindeSchluessel);
     
             /**
+             * Lädt die Ampel initial mit dem Gemeindeschluessel.
+             * @param {*} gemeindeSchluessel 
+             */
+            function load (gemeindeSchluessel) {
+                ladeAmpel(gemeindeSchluessel, null, null, null);
+            }
+            
+            /**
              * Laedt und initialisiert die Ampel sowie die im Text verwendeten Parameter mit aktuellen Werten 
              * bezogen auf den Landkreis, der ueber den gemeindeSchluessel ermittelt wird.
              * @param {*} gemeindeSchluessel 
              */
-            function load (gemeindeSchluessel) {
+            function ladeAmpel (gemeindeSchluessel, gwHospitalisierung, gwIntensivGelb, gwIntensivRot) {
                 gemeindeSchluessel = parseGemeindeschluessel(gemeindeSchluessel);
+                if(gwHospitalisierung != null && gwIntensivGelb != null && gwIntensivRot != null) {
+                    if(grenzwertIntensivBehandlungGelb < grenzwertIntensivBehandlungRot) {
+                        grenzwertHospitalisierung = gwHospitalisierung;
+                        grenzwertIntensivBehandlungGelb = gwIntensivGelb;
+                        grenzwertIntensivBehandlungRot = gwIntensivRot;
+                    }
+                }
+                //Zu echten Zahlen parsen
+                grenzwertHospitalisierung = parseInt(grenzwertHospitalisierung);
+                grenzwertIntensivBehandlungGelb = parseInt(grenzwertIntensivBehandlungGelb);
+                grenzwertIntensivBehandlungRot = parseInt(grenzwertIntensivBehandlungRot);
                 var client = new HttpClient();
                 var restServiceUrl = 'https://api.corona-zahlen.org/districts/' + gemeindeSchluessel;
                 client.get(restServiceUrl, function(response) {              
@@ -85,13 +104,13 @@
                     rkiLandkreisLastUpdate                      = new Date(meta['lastUpdate']).toLocaleDateString("de-DE", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' Uhr';
                     rkiLandkreisBundeslandKurzname              = landkreisDaten['stateAbbreviation']; // bspw. BY, SN, RP, BW,...
                     rkiLandkreisBundesland                      = landkreisDaten['state']; //Bayern, Sachsen, Rheinland-Pfalz,... 
-                    rkiLandkreisEinwohnerAnzahl                 = landkreisDaten['population'];
-                    rkiLandkreisCOVID19Faelle                   = landkreisDaten['cases'];
-                    rkiLandkreisCOVID19FaelleTod                = landkreisDaten['deaths'];
-                    rkiLandkreisCOVID19FaellePro100kEinwohner   = landkreisDaten['casesPer100k'];
-                    rkiLandkreisCOVID19FaelleLetzte7Tage        = landkreisDaten['casesPerWeek'];
-                    rkiLandkreisCOVID19FaelleLetzte7TageTod     = landkreisDaten['deathsPerWeek'];
-                    rkiLandkreisCOVID19FaelleGenesen            = landkreisDaten['recovered'];
+                    rkiLandkreisEinwohnerAnzahl                 = parseInt(landkreisDaten['population']);
+                    rkiLandkreisCOVID19Faelle                   = parseInt(landkreisDaten['cases']);
+                    rkiLandkreisCOVID19FaelleTod                = parseInt(landkreisDaten['deaths']);
+                    rkiLandkreisCOVID19FaellePro100kEinwohner   = parseInt(landkreisDaten['casesPer100k']);
+                    rkiLandkreisCOVID19FaelleLetzte7Tage        = parseInt(landkreisDaten['casesPerWeek']);
+                    rkiLandkreisCOVID19FaelleLetzte7TageTod     = parseInt(landkreisDaten['deathsPerWeek']);
+                    rkiLandkreisCOVID19FaelleGenesen            = parseInt(landkreisDaten['recovered']);
                     
                     //Setzen der ermittelten Werte fuer die Anzeige im HTML Teil.
                     // Name des Landkreises:  <span id="anzeigeLandkreisname"></span>
@@ -127,18 +146,18 @@
                         //Start: Alle Werte, die ueber unsere Krankenausampel API verfuegbar sind, und verwendet werden koennen, 
                         //d.h., nicht alle Werte werden auch in der Krankenhausampel verwendet - waeren aber verfuegbar.
                         //Da Aufruf asynchron ist, sollten alle Variablen ausserhalb der Funktion und des Restcalls definiert werden.
-                        rkiHospitalisierteFaelle                = result["rki_hospitalisierung"];
-                        rkiInzidenz7TageHospitalisierung        = result["rki_hospitalisierung_inzidenz"];
+                        rkiHospitalisierteFaelle                = parseInt(result["rki_hospitalisierung"]);
+                        rkiInzidenz7TageHospitalisierung        = parseFloat(result["rki_hospitalisierung_inzidenz"]);
                         rkiDatenstand                           = result["rki_datenstand"];                                            
-                        diviFaelleCovidAktuell                  = result["divi_intensiv"];
+                        diviFaelleCovidAktuell                  = parseInt(result["divi_intensiv"]);
                         diviDatenstand                          = result["divi_datenstand"];
-                        diviLandkreisAnzahlStandorte            = result["divi_lk_anzahl_standorte"];
-                        diviLandkreisAnzahlMeldebereich         = result["divi_lk_anzahl_meldebereiche"];
-                        diviLandkreisIntensivbettenAuslastung   = result["divi_lk_prozent_anteil_belegte_betten_an_gesamtbetten"];
-                        diviLandkreisBettenFrei                 = result["divi_lk_betten_frei"];
-                        diviLandkreisBettenBelegt               = result["divi_lk_betten_belegt"];
-                        diviLandkreisCOVIDFaelleAktuell         = result["divi_lk_faelle_covid_aktuell"];
-                        diviLandkreisCOVIDFaelleAktuellBeatmet  = result["divi_lk_faelle_covid_aktuell_invasiv_beatmet"];
+                        diviLandkreisAnzahlStandorte            = parseInt(result["divi_lk_anzahl_standorte"]);
+                        diviLandkreisAnzahlMeldebereich         = parseInt(result["divi_lk_anzahl_meldebereiche"]);
+                        diviLandkreisIntensivbettenAuslastung   = parseFloat(result["divi_lk_prozent_anteil_belegte_betten_an_gesamtbetten"]);
+                        diviLandkreisBettenFrei                 = parseInt(result["divi_lk_betten_frei"]);
+                        diviLandkreisBettenBelegt               = parseInt(result["divi_lk_betten_belegt"]);
+                        diviLandkreisCOVIDFaelleAktuell         = parseInt(result["divi_lk_faelle_covid_aktuell"]);
+                        diviLandkreisCOVIDFaelleAktuellBeatmet  = parseInt(result["divi_lk_faelle_covid_aktuell_invasiv_beatmet"]);
                         rkiBundeslandNameAdverb                 = result['bundesland_name_adverb']
                         //Ende: Alle verfuegbaren Werte aus der API
 
@@ -187,7 +206,7 @@
                         /** Ampelfarbe setzen (rot schlaegt gelb) */
                         cssClassAmpelfarbe = "ampelgruen"; //default gruen
                         //cssAmpeltextfarbe = "#fff"; //wenn Gelb, kann man den weissen Text in der Ampel nicht mehr lesen... in dem Fall auf dunklere Farbe setzen
-                        ampelfarbeText = "Gr&uuml;n";                        
+                        ampelfarbeText = "Gr&uuml;n";
                         if(rkiHospitalisierteFaelle >= grenzwertHospitalisierung) {
                             cssClassAmpelfarbe ="ampelgelb";
                             //cssAmpeltextfarbe = "#000";
