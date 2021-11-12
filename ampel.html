@@ -56,7 +56,7 @@
                                         <!-- Text fuer Hotspot Landkreis: -->
                                         <br/><strong>Hotspot!</strong> Die Ampel steht auf Rot, da im <span class="anzeigeLandkreisname"></span> die 7-Tages-Inzidenz &uuml;ber 300 liegt und die Auslastung der Intensivbetten mehr als 80% betr&auml;gt.
                                     </span>              
-                                    <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt <span class="anzeigeBundeslandAdverb">bayernweit</span> <span id="anzeige7TageInzidenzHospitalisierung"></span><sup>1</sup>.
+                                    <br/>Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt <span class="anzeigeBundeslandAdverb">bayernweit</span> <span class="anzeige7TageInzidenzHospitalisierung"></span><sup>1</sup>.
                               </div>
                           </div>
                       </div>
@@ -73,7 +73,7 @@
                                       <div class="grenzwert_gelb">
                                           <div class="grenzwertText" id="anzeigeAmpelGrenzwertHospitalisierung">Grenzwert: 1200</div>
                                       </div>                                                        
-                                      <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeGelb">Gelb</div>
+                                      <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeGelbHospitalisierteFaelle">Gelb</div>
                                       <div class="aktuellerWert" id="divHospitalisierungBreite"> 
                                           <div class="zeiger_container">
                                               <div class="zeiger"></div>
@@ -93,13 +93,13 @@
                                         </div>
                                         <div class="grenzwert_rot">
                                             <div class="grenzwertText" id="anzeigeAmpelGrenzwertIntensivRot">600</div>
-                                            <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeGelb">Gelb</div>
+                                            <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeGelbIntensivbehandlung">Gelb</div>
                                         </div>
                                         <div class="balkenFarbtext farbnameSichtbar" id="balkenFarbeRot">Rot</div>
                                         <div class="aktuellerWert" id="divBehandlungBreite"> 
                                             <div class="zeiger_container">
                                                 <div class="zeiger"></div>
-                                                <span id="aktuellerWertIntensivmedizinisch" title="F&auml;lle in intensivmedizinischer Behandlung:"><span class="anzeigeFaelleCovidAktuell">DIVI Wert</span></span>
+                                                <span id="aktuellerWertIntensivmedizinisch" title="F&auml;lle in intensivmedizinischer Behandlung:"><span class="anzeigeCOVID19FaelleAktuell">DIVI Wert</span></span>
                                             </div>
                                         </div>
                                   </div>
@@ -139,7 +139,8 @@
     <footer class="bg-light text-center text-lg-start">
         <div class="row mb-2" style="clear:both;font-size:smaller;text-align:center;padding-top:10pt;color:red;">
             <div class="col">
-                F&uuml;r Landkreise au&szlig;erhalb Bayerns m&uuml;ssen die Grenzwerte der Ampel-Indikatoren in den Zeilen 6, 9 und 12 im Quellcode des <a href="./js/ampel.js" target="_blank" title="">JavaScripts (/js/ampel.js)</a> angepasst werden!
+                F&uuml;r Landkreise au&szlig;erhalb Bayerns m&uuml;ssen die Grenzwerte der Ampel-Indikatoren in den Zeilen 6, 9 und 12 im Quellcode des <a href="./js/ampel.js" target="_blank" title="">JavaScripts (/js/ampel.js)</a> angepasst werden!<br/>
+                Anstatt der grafischen Anzeige der Ampel k&ouml;nnen die Werte auch in Textform angezeigt werden. Ein Beispiel dazu findet sich in der <a href="./text.html" target="_blank" title="">text.html</a>.   
             </div>
         </div>
         <div class="text-center p-3">

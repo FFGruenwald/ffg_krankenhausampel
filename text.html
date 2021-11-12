@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krankenhaus-Ampel (krankenhausampel.info) - Beispieldarstellung</title>
+    <!--+ 
+        | Einbinden des Bootstrap-Frameworks: 
+        | Wird durch die (eigene) Webseite bereits das Bootstrap-Framework eingebunden sollte die folgende Zeile entfernt werden
+        +-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <style>
+        body {
+            margin-left: 30px;
+        }
+    </style>
+  </head>
+  <body>
+    <script src="js/ampel.js"></script>
+    <div class="container-fluid">
+      <h1>Krankenhausampel.info</h1>
+      <p>Anstatt die Krankenhausampel grafisch darzustellen (siehe Beispieldatei <a href="ampel.html" target="_blank" title="">ampel.html</a>), k&ouml;nnen die einzelnen Werte auch in einem beliebigen Fließtext angezeigt werden.
+      Dazu m&uuml;ssen der Gemeindeschl&uuml;ssel (und f&uuml;r Landkreise au&szlig;erhalb Bayerns auch die Grenzwerte) in der Datei <a href="js/ampel.js" target="_blank" title="">ampel.js</a> angepasst werden.</p>
+
+      <div class="row mb-3" style="border: 3px solid darkblue;padding: 15px;">
+        <div class="col">
+          <strong>Beispieltext:</strong><p>
+          Die Krankenhausampel steht in <span class="anzeigeBundeslandName"></span> auf <span class="anzeigeAmpelfarbe"></span>! Die 7-Tages-Inzidenz im <span class="anzeigeLandkreisname"></span> betr&auml;gt <span class="anzeige7TageInzidenzWert"></span><sup>1</sup>.
+          In den letzten 7 Tagen wurden <span class="anzeigeBundeslandAdverb"></span> <span class="anzeigeHospitalisierteFaelle"></span><sup>2</sup> Personen mit COVID-19 station&auml;r in Krankenh&auml;user aufgenommen. Intensivmedizinisch behandelt werden derzeit <span class="anzeigeCOVID19FaelleAktuell"></span><sup>2</sup> Personen.
+          Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&auml;gt in <span class="anzeigeBundeslandName"></span> <span class="anzeige7TageInzidenzHospitalisierung"></span><sup>2</sup>.
+          </p>
+          <p><small>
+              <sup>1</sup> Robert-Koch-Institut (RKI), <a href="https://api.corona-zahlen.org/" target="_blank" title="Lizenz: CC-BY-4.0">CC-BY-4.0</a> (Stand: <span class="anzeigeLetztesUpdateRKI"></span>)<br/>
+              <sup>2</sup> DIVI-Intensivregister, <a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">www.intensivregister.de</a> (Stand: <span class="anzeigeLetztesUpdateDIVI"></span>)</small></p>
+        </div>
+        <div class="col">
+          <strong>Beispieltext HTML-Code:</strong><br/>
+          <textarea id="beispieltext1" class="form-control" rows="6" onClick="this.select();"><p>Die Krankenhausampel steht in <span class="anzeigeBundeslandName"></span> auf <span class="anzeigeAmpelfarbe"></span>! Die 7-Tages-Inzidenz im <span class="anzeigeLandkreisname"></span> betr&amp;auml;gt <span class="anzeige7TageInzidenzWert"></span><sup>1</sup>. In den letzten 7 Tagen wurden <span class="anzeigeBundeslandAdverb"></span> <span class="anzeigeHospitalisierteFaelle"></span><sup>2</sup> Personen mit COVID-19 station&amp;auml;r in Krankenh&amp;auml;user aufgenommen. Intensivmedizinisch behandelt werden derzeit <span class="anzeigeCOVID19FaelleAktuell"></span><sup>2</sup> Personen. Die 7-Tages-Hospitalisierungs-Inzidenz (pro 100.000 Einwohner) betr&amp;auml;gt in <span class="anzeigeBundeslandName"></span> <span class="anzeige7TageInzidenzHospitalisierung"></span><sup>2</sup>.</p><p><small><sup>1</sup> Robert-Koch-Institut (RKI), <a href="https://api.corona-zahlen.org/" target="_blank" title="Lizenz: CC-BY-4.0">CC-BY-4.0</a> (Stand: <span class="anzeigeLetztesUpdateRKI"></span>)<br/><sup>2</sup> DIVI-Intensivregister, <a href="https://www.intensivregister.de/" target="_blank" title="Link zu Intensivregister.de">www.intensivregister.de</a> (Stand: <span class="anzeigeLetztesUpdateDIVI"></span>)</small></p></textarea>
+        </div>
+      </div>    
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>    
+      <div class="row">
+        <div class="col">
+          <h3>Verf&uuml;gbare Anzeige-Elemente</h3>
+        </div>
+      </div>  
+      <div class="row">
+        <div class="col">
+          Die folgenden <strong>HTML-Tags</strong> stehen zur Verf&uuml;gung und werden bei der <strong>Anzeige</strong> durch die entsprechenden Werte ersetzt. 
+        </div>
+      </div>  
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col" style="width:40%;">HTML-Tag</th>
+          <th scope="col">Anzeige</th>
+          <th scope="col">Quelle</th>
+          <th scope="col">Beschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <script>
+            var werte = [
+                        {"name":"anzeigeLandkreisname",                           "source":"RKI","description":"Name des Landkreises, &uuml;ber den Gemeindeschl&uuml;ssel (AGS) ermittelt."},
+                        {"name":"anzeigeBundeslandName",                          "source":"RKI","description":"Name des Bundeslandes, zu dem der Landkreis geh&ouml;rt."},
+                        {"name":"anzeige7TageInzidenzWert",                       "source":"RKI","description":"7-Tages-Inzidenzwert im Landkreis."},
+                        {"name":"anzeigeLandkreisEinwohnerzahl",                  "source":"RKI","description":"Einwohnerzahl bezogen auf den Landkreis."},
+                        {"name":"anzeigeCOVID19FaelleGesamt",                     "source":"RKI","description":"Gesamtanzahl bisher best&auml;tigter COVID-19-F&auml;lle im Landkreis."},
+                        {"name":"anzeigeCOVID19FaelleGesamtTod",                  "source":"RKI","description":"Gesamtanzahl bisher best&auml;tigter Todesf&auml;lle durch/mit COVID-19 im Landkreis."},
+                        {"name":"anzeigeCOVID19FaelleGesamtGenesen",              "source":"RKI","description":"Gesamtanzahl bisher genesener COVID-19-F&auml;lle im Landkreis."},
+                        {"name":"anzeigeCOVID19FaellePro100kEinwohner",           "source":"RKI","description":"Anzahl COVID-19-F&auml;lle pro 100.000 Einwohner."},
+                        {"name":"anzeigeCOVID19FaelleLetzte7Tage",                "source":"RKI","description":"Anzahl COVID-19-F&auml;lle der letzten 7 Tage."},
+                        {"name":"anzeigeCOVID19FaelleLetzte7TageTod",             "source":"RKI","description":"Anzahl Todesf&auml;lle durch/mit COVID-19 der letzten 7 Tage."},
+                        {"name":"anzeigeLetztesUpdateRKI",                        "source":"RKI","description":"Datenstand aller Werte mit Quelle RKI (Robert-Koch-Institut)."},
+                        {"name":"anzeigeHospitalisierteFaelle",                   "source":"DIVI","description":"Hospitalisierte COVID-19-F&auml;lle der letzten 7 Tage."},
+                        {"name":"anzeige7TageInzidenzHospitalisierung",           "source":"DIVI","description":"7-Tages-Hospitalisierungsinzidenz."},
+                        {"name":"anzeigeCOVID19FaelleAktuell",                    "source":"DIVI","description":"Anzahl aller aktuell in intensivmedizinischer Behandlung (beatmet und nicht beatmet) befindlichen COVID-19-Patienten - Bundesland."},
+                        {"name":"anzeigeCOVID19FaelleLKAktuell",                   "source":"DIVI","description":"Anzahl aller aktuell in intensivmedizinischer Behandlung (beatmet und nicht beatmet) befindlichen COVID-19-Patienten - Landkreis."},
+                        {"name":"anzeigeCOVID19FaelleAktuellBeatmet",             "source":"DIVI","description":"Anzahl aktuell invasiv beatmeter COVID-19-Patienten (Erwachsene und Kinder) inintensivmedizinischer Behandlung."},
+                        {"name":"anzeigeAnzahlStandorte",                         "source":"DIVI","description":"Anzahl Standorte im Landkreis, die eine Meldung abgegeben haben welche in den aktuellen Datenstand einflie&szlig;t."},
+                        {"name":"anzeigeAnzahlMeldebereiche",                     "source":"DIVI","description":"Anzahl Meldebereiche im Landkreis, die eine Meldung abgegeben haben, welche  in den aktuellen Datenstand einflie&szlig;t."},
+                        {"name":"anzeigeAnzahlBettenFrei",                        "source":"DIVI","description":"Anzahl freier, betreibbarer Intensivbetten im Landkreis."},
+                        {"name":"anzeigeAnzahlBettenBelegt",                      "source":"DIVI","description":"Anzahl belegter Intensivbetten, unabh&auml;ngig von der Behandlungsursache, im Landkreis."},
+                        {"name":"anzeigeLetztesUpdateDIVI",                       "source":"DIVI","description":"Datenstand aller Werte mit Quelle Divi (Intensivregister)."},
+                        {"name":"anzeigeGemeindeschluessel",                      "source":"KHA","description":"Verwendeter Gemeindesch&uuml;ssel als Grundlage f&uuml;r alle angezeigten Daten."},
+                        {"name":"anzeigeBundeslandAdverb",                        "source":"KHA","description":"Adverb des Bundeslandes."},
+                        {"name":"anzeigeHotspotIntensivbettenAuslastungProzent",  "source":"KHA","description":"Auslastung der Intensivbetten in Prozent."},
+                        {"name":"anzeigeGrenzeInzidenzWert3G",                    "source":"KHA","description":"Grenzwert ab dem 3G-Regel gilt."},
+                        {"name":"anzeigeGrenzwertHospitalisierung",               "source":"KHA","description":"Grenzwert Hospitalisierte F&auml;lle, ab dem Ampel Gelb wird."},
+                        {"name":"anzeigeGrenzwertIntensivGelb",                   "source":"KHA","description":"Grenzwert F&auml;lle in intensivmedizinischer Behandlung, ab dem Ampel Gelb wird."},
+                        {"name":"anzeigeGrenzwertIntensivRot",                    "source":"KHA","description":"Grenzwert F&auml;lle in intensivmedizinischer Behandlung, ab dem Ampel Rot wird."},
+                        {"name":"anzeigeHotspotInzidenzGrenze7Tage",              "source":"KHA","description":"7-Tages-Inzidenz Schwellwert ab dem Landkreis als Hotspot gilt (in Verbindung mit Auslastung Krankenh&auml;user)."},
+                        {"name":"anzeigeHotspotJaNein",                           "source":"KHA","description":"'Ja' oder 'Nein' - ist Landkreis als Hotpot identifiziert?"},
+                        {"name":"anzeigeHotspotText",                             "source":"KHA","description":"Textanzeige 'Hotspot' wenn Landkreis ein Hotspot ist, sonst 'kein Hotspot'."},
+                        {"name":"anzeigeAmpelfarbe",                              "source":"KHA","description":"Aktuelle Ampelfarbe als Text."},
+                    ];
+            var arrayLength = werte.length;
+            for (var i = 0; i < werte.length; i++) {
+                var arrLine = werte[i];
+                document.write('<tr>');
+                    document.write("<td><input size=\"70\" type=\"text\" value=\"&lt;span class=&#34;"+arrLine['name']+"&#34;&gt;&lt;/span&gt;\" onClick=\"this.select();\"/></td>");
+                    document.write('<td><span class=\"'+arrLine['name']+'\"></span></td>');
+                    document.write('<td>' + arrLine['source'] + '</td>');
+                    document.write('<td>' + arrLine['description'] + '</td>');
+                document.write('</tr>');
+            }
+        </script>
+    </tbody>
+    </table>
+    <div class="row mb-5">
+      <div class="col">
+        <small><strong>Quellen:</strong> RKI = <a href="https://api.corona-zahlen.org/" target="_blank" title="">Robert-Koch-Institut</a>, DIVI = <a href="https://www.intensivregister.de/" target="_blank" title="">DIVI-Intensivregister</a>, KHA = bereitgestellt durch dieses Krankenhaus-Ampel Skript.</small>
+      </div>
+    </div>
+    </div><!--container-->
+    <!--+
+        | Der <footer> kann entfernt werden, er dient nur der Vollstaendigkeit. 
+        +-->	
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3">
+            Bereitgestellt von <a class="text-dark" href="https://Krankenhausampel.info/" target="_blank">Krankenhausampel.info</a> | Probleme? W&uuml;nsche? Anregungen? <a href="mailto:hilfe@krankenhausampel.info" target="_blank">hilfe@krankenhausampel.info</a> 
+        </div>
+    </footer> 
+  </body>
+</html>

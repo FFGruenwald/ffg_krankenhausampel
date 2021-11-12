@@ -19,32 +19,9 @@
             var grenzwertHotspotIntensivbettenAuslastung = 80; //in Prozent
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Ab hier sind keine Aenderungen mehr erforderlich
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Ab hier sind keine Aenderungen mehr erforderlich!
 
-            var rkiHospitalisierteFaelle = 0;
-            var diviFaelleCovidAktuell = 0;
-            var rkiDatenstand = "";
-            var diviDatenstand = "";
-            var format = 'json';
-            var rkiLandkreisName = '';
-            var rkiLandkreis7TagesInzidenz = '';
-            var rkiLandkreisLastUpdate = '';
-            var rkiLandkreisBundeslandKurzname = '';
-            var rkiLandkreisBundesland = '';
-            var rkiBundeslandNameAdverb = '';
-    
-            //** Start: Default Werte setzen und Ampel initialisieren */
-            document.getElementById("anzeigeAmpelGrenzwertHospitalisierung").innerHTML ="Grenzwert: " + grenzwertHospitalisierung + "&nbsp;";
-            document.getElementById("anzeigeAmpelGrenzwertIntensivGelb").innerHTML ="Grenzwerte: " + grenzwertIntensivBehandlungGelb + "&nbsp;";
-            document.getElementById("anzeigeAmpelGrenzwertIntensivRot").innerHTML = grenzwertIntensivBehandlungRot + "&nbsp;";
-            document.getElementById("hinweisHotspot").style.display ="none";
-            document.getElementById("hinweis2GRegel").style.display ="none";
-            document.getElementById("hinweis3GRegel").style.display ="none";
-            document.getElementById("hinweis3GplusRegel").style.display ="none";
-            document.getElementById("ampeltext").innerHTML = "";
-            document.getElementById("ampelfarbe").setAttribute("class", "ampelFarbeInitial");
-            //** Ende: Default Werte setzen und Ampel initialisieren */
-    
             var HttpClient = function() {
                 this.get = function(request, callback) {
                     var httpRequest = new XMLHttpRequest();
@@ -56,14 +33,22 @@
                     httpRequest.send(null);
                 }
             }
+            
+            var rkiHospitalisierteFaelle = 0;
+            var diviFaelleCovidAktuell = 0;
+            var rkiLandkreis7TagesInzidenz = '';
+            var format = 'json';
+            //Default Werte
+            defaultWerteSetzen();
     
-            load(gemeindeSchluessel);
+            //Ampelanzeige: Einstiegspunkt
+            ampelAnzeigen(gemeindeSchluessel);
     
             /**
              * Lädt die Ampel initial mit dem Gemeindeschluessel.
              * @param {*} gemeindeSchluessel 
              */
-            function load (gemeindeSchluessel) {
+            function ampelAnzeigen (gemeindeSchluessel) {
                 ladeAmpel(gemeindeSchluessel, null, null, null);
             }
             
@@ -81,7 +66,7 @@
                         grenzwertIntensivBehandlungRot = gwIntensivRot;
                     }
                 }
-                //Zu echten Zahlen parsen
+                //Grenzwerte zu "echten" Zahlen parsen
                 grenzwertHospitalisierung = parseInt(grenzwertHospitalisierung);
                 grenzwertIntensivBehandlungGelb = parseInt(grenzwertIntensivBehandlungGelb);
                 grenzwertIntensivBehandlungRot = parseInt(grenzwertIntensivBehandlungRot);
@@ -94,108 +79,26 @@
                         console.error(data["error"]);
                         return;
                     }
-                    var meta = data['meta'];
                     var landkreisDaten = data['data'][gemeindeSchluessel];
+                    rkiLandkreis7TagesInzidenz = Math.round((landkreisDaten['weekIncidence'] * 100)) / 100;
 
-                    //Start: Alle Werte, die ueber die RKI API api.corona-zahlen.org verfuegbar sind, und verwendet werden koennen,
-                    //d.h., nicht alle Werte werden in der Krankenhausampel verwendet.                
-                    rkiLandkreisName                            = landkreisDaten['county'].replace('LK', 'Landkreis');
-                    rkiLandkreis7TagesInzidenz                  = Math.round((landkreisDaten['weekIncidence'] * 100)) / 100;
-                    rkiLandkreisLastUpdate                      = new Date(meta['lastUpdate']).toLocaleDateString("de-DE", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' Uhr';
-                    rkiLandkreisBundeslandKurzname              = landkreisDaten['stateAbbreviation']; // bspw. BY, SN, RP, BW,...
-                    rkiLandkreisBundesland                      = landkreisDaten['state']; //Bayern, Sachsen, Rheinland-Pfalz,... 
-                    rkiLandkreisEinwohnerAnzahl                 = parseInt(landkreisDaten['population']);
-                    rkiLandkreisCOVID19Faelle                   = parseInt(landkreisDaten['cases']);
-                    rkiLandkreisCOVID19FaelleTod                = parseInt(landkreisDaten['deaths']);
-                    rkiLandkreisCOVID19FaellePro100kEinwohner   = parseInt(landkreisDaten['casesPer100k']);
-                    rkiLandkreisCOVID19FaelleLetzte7Tage        = parseInt(landkreisDaten['casesPerWeek']);
-                    rkiLandkreisCOVID19FaelleLetzte7TageTod     = parseInt(landkreisDaten['deathsPerWeek']);
-                    rkiLandkreisCOVID19FaelleGenesen            = parseInt(landkreisDaten['recovered']);
-                    
-                    //Setzen der ermittelten Werte fuer die Anzeige im HTML Teil.
-                    // Name des Landkreises:  <span id="anzeigeLandkreisname"></span>
-                    var lk = document.querySelectorAll('[class="anzeigeLandkreisname"]');
-                    for(var i = 0; i < lk.length; i++) {
-                        lk[i].innerHTML = rkiLandkreisName;
-                    }
-
-                    // 7-Tages-Inzidenzwert
-                    var inz = document.querySelectorAll('[id="anzeige7TageInzidenzWert"]');
-                    for(var i = 0; i < inz.length; i++) {
-                        inz[i].innerHTML = rkiLandkreis7TagesInzidenz;
-                    }        
-
-                    // Letztes Update RKI Daten 
-                    var letztesUpdate= document.querySelectorAll('[class="anzeigeLetztesUpdateRKI"]');
-                    for(var i = 0; i < letztesUpdate.length; i++) {
-                        letztesUpdate[i].innerHTML = rkiLandkreisLastUpdate;
-                    }
-    
-                    // Inzidenz Grenzwert 3G ersetzen
-                    var grenzwert3G= document.querySelectorAll('[id="anzeigeGrenzeInzidenzWert3G"]');
-                    for(var i = 0; i < grenzwert3G.length; i++) {
-                        grenzwert3G[i].innerHTML = grenzwertInzidenz3GRegel;
-                    }
-    
                     //Rest API Aufrufe muessen verschachtelt werden, da Bundesland erst von der RKI API ermittelt wird
                     var nClient = new HttpClient();
-                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/v3/?bl=' + rkiLandkreisBundeslandKurzname + '&gs=' + gemeindeSchluessel;
-                    nClient.get(nRestServiceUrl, function(response1) {
-                        var result = JSON.parse(response1);
-                        
-                        //Start: Alle Werte, die ueber unsere Krankenausampel API verfuegbar sind, und verwendet werden koennen, 
-                        //d.h., nicht alle Werte werden auch in der Krankenhausampel verwendet - waeren aber verfuegbar.
-                        //Da Aufruf asynchron ist, sollten alle Variablen ausserhalb der Funktion und des Restcalls definiert werden.
+                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/v3/?bl=' + landkreisDaten['stateAbbreviation'] + '&gs=' + gemeindeSchluessel;
+                    nClient.get(nRestServiceUrl, function(apiResponse) {
+                        var result = JSON.parse(apiResponse);
+                        //Nur fuer Berechnungen relevante Werte werden hier zugewiesen, 
+                        //alle anderen Werte fuer eine Anzeige werden unten in der Funktion ausgelesen
                         rkiHospitalisierteFaelle                = parseInt(result["rki_hospitalisierung"]);
-                        rkiInzidenz7TageHospitalisierung        = parseFloat(result["rki_hospitalisierung_inzidenz"]);
-                        rkiDatenstand                           = result["rki_datenstand"];                                            
                         diviFaelleCovidAktuell                  = parseInt(result["divi_intensiv"]);
-                        diviDatenstand                          = result["divi_datenstand"];
-                        diviLandkreisAnzahlStandorte            = parseInt(result["divi_lk_anzahl_standorte"]);
-                        diviLandkreisAnzahlMeldebereich         = parseInt(result["divi_lk_anzahl_meldebereiche"]);
                         diviLandkreisIntensivbettenAuslastung   = parseFloat(result["divi_lk_prozent_anteil_belegte_betten_an_gesamtbetten"]);
-                        diviLandkreisBettenFrei                 = parseInt(result["divi_lk_betten_frei"]);
-                        diviLandkreisBettenBelegt               = parseInt(result["divi_lk_betten_belegt"]);
-                        diviLandkreisCOVIDFaelleAktuell         = parseInt(result["divi_lk_faelle_covid_aktuell"]);
-                        diviLandkreisCOVIDFaelleAktuellBeatmet  = parseInt(result["divi_lk_faelle_covid_aktuell_invasiv_beatmet"]);
-                        rkiBundeslandNameAdverb                 = result['bundesland_name_adverb']
-                        //Ende: Alle verfuegbaren Werte aus der API
 
+                        //Ermitteln ob Landkreis ein Hotspot ist
                         var istHotspot = false;
                         if(rkiLandkreis7TagesInzidenz >= grenzwertHotspotInzidenz7Tage && diviLandkreisIntensivbettenAuslastung >= grenzwertHotspotIntensivbettenAuslastung){
                             istHotspot = true;
-                            console.log('Der ' + rkiLandkreisName + ' wurde als Hotspot identifiziert, da Auslastung der Intensivbetten >= ' + grenzwertHotspotIntensivbettenAuslastung + '% (ist: ' + diviLandkreisIntensivbettenAuslastung + '%) UND 7-Tages-Inzidenzwert >= ' + grenzwertHotspotInzidenz7Tage + ' (ist: ' + rkiLandkreis7TagesInzidenz + ')!');
+                            console.log('Der ' + landkreisDaten['county'] + ' wurde als Hotspot identifiziert, da Auslastung der Intensivbetten >= ' + grenzwertHotspotIntensivbettenAuslastung + '% (ist: ' + diviLandkreisIntensivbettenAuslastung + '%) UND 7-Tages-Inzidenzwert >= ' + grenzwertHotspotInzidenz7Tage + ' (ist: ' + rkiLandkreis7TagesInzidenz + ')!');
                         }
-        
-                        var anzeigeFaelleCovidAktuell= document.querySelectorAll('[class="anzeigeFaelleCovidAktuell"]');
-                        for(var i = 0; i < anzeigeFaelleCovidAktuell.length; i++) {
-                            anzeigeFaelleCovidAktuell[i].innerHTML = diviFaelleCovidAktuell;
-                        }
-                        var anzeigeHospitalisierteFaelle= document.querySelectorAll('[class="anzeigeHospitalisierteFaelle"]');
-                        for(var i = 0; i < anzeigeHospitalisierteFaelle.length; i++) {
-                            anzeigeHospitalisierteFaelle[i].innerHTML = rkiHospitalisierteFaelle;
-                        }
-                        var anzeigeLetztesUpdateDIVI= document.querySelectorAll('[class="anzeigeLetztesUpdateDIVI"]');
-                        for(var i = 0; i < anzeigeLetztesUpdateDIVI.length; i++) {
-                            anzeigeLetztesUpdateDIVI[i].innerHTML = diviDatenstand;
-                        }
-        
-                        var anzeigeLetztesUpdateLGL= document.querySelectorAll('[class="anzeigeLetztesUpdateLGL"]');
-                        for(var i = 0; i < anzeigeLetztesUpdateLGL.length; i++) {
-                            anzeigeLetztesUpdateLGL[i].innerHTML = rkiDatenstand;
-                        }
-
-                        var anzeigeBundeslandName= document.querySelectorAll('[class="anzeigeBundeslandName"]');
-                        for(var i = 0; i < anzeigeBundeslandName.length; i++) {
-                            anzeigeBundeslandName[i].innerHTML = rkiLandkreisBundesland;
-                        }
-
-                        var anzeigeBundeslandAdverb= document.querySelectorAll('[class="anzeigeBundeslandAdverb"]');
-                        for(var i = 0; i < anzeigeBundeslandAdverb.length; i++) {
-                            anzeigeBundeslandAdverb[i].innerHTML = rkiBundeslandNameAdverb;
-                        }
-
-                        document.getElementById("anzeige7TageInzidenzHospitalisierung").innerHTML = rkiInzidenz7TageHospitalisierung;
 
                         /** Setze den Zusatztext unter der Ampel fuer 3G */
                         var ampelzusatztext = "";
@@ -205,25 +108,21 @@
                         } 
                         /** Ampelfarbe setzen (rot schlaegt gelb) */
                         cssClassAmpelfarbe = "ampelgruen"; //default gruen
-                        //cssAmpeltextfarbe = "#fff"; //wenn Gelb, kann man den weissen Text in der Ampel nicht mehr lesen... in dem Fall auf dunklere Farbe setzen
                         ampelfarbeText = "Gr&uuml;n";
                         if(rkiHospitalisierteFaelle >= grenzwertHospitalisierung) {
                             cssClassAmpelfarbe ="ampelgelb";
-                            //cssAmpeltextfarbe = "#000";
                             ampelfarbeText = "Gelb";
                             ampelzusatztext = "3GPlus-Regel";
                             hinweiseAnzeigen("hinweis3GplusRegel");
                         }
                         if (diviFaelleCovidAktuell >= grenzwertIntensivBehandlungGelb) {
                             cssClassAmpelfarbe ="ampelgelb";
-                            //cssAmpeltextfarbe = "#fff";
                             ampelfarbeText = "Gelb";
                             ampelzusatztext = "3G<font style='text-transform:lowercase;'>Plus</font>-Regel";
                             hinweiseAnzeigen("hinweis3GplusRegel");
                         }
                         if (diviFaelleCovidAktuell >= grenzwertIntensivBehandlungRot) {
                             cssClassAmpelfarbe ="ampelrot";
-                            //cssAmpeltextfarbe = "#fff";
                             ampelfarbeText = "Rot";
                             ampelzusatztext = "2G-Regel";
                             hinweiseAnzeigen("hinweis2GRegel");
@@ -231,18 +130,24 @@
                         //Hotspot schlaegt alle Farben:
                         if(istHotspot) {
                             cssClassAmpelfarbe ="ampelrot";
-                            //cssAmpeltextfarbe = "#fff";
                             ampelfarbeText = "Rot";
                             ampelzusatztext = "2G-Regel";
-                            document.getElementById("hinweisHotspot").style.display = "contents";
+                            if(document.getElementById("hinweisHotspot") != null)
+                                document.getElementById("hinweisHotspot").style.display = "contents";
                         }
 
                         /** Zusatztext unter der Ampel je nach Ampelfarbe (2G, 3G, 3GPlus,...) */
-                        document.getElementById("ampelzusatztext").innerHTML = ampelzusatztext;
+                        if(document.getElementById("ampelzusatztext") != null)
+                            document.getElementById("ampelzusatztext").innerHTML = ampelzusatztext;
                 
-                        document.getElementById("ampeltext").setAttribute("style", "display:flex;");
-                        document.getElementById("ampelfarbe").setAttribute("class", cssClassAmpelfarbe);
-                        document.getElementById("ampeltext").innerHTML = ampelfarbeText;
+                        if(document.getElementById("ampeltext") != null)
+                            document.getElementById("ampeltext").setAttribute("style", "display:flex;");
+                        
+                        if(document.getElementById("ampelfarbe") != null)
+                           document.getElementById("ampelfarbe").setAttribute("class", cssClassAmpelfarbe);
+                        
+                        if(document.getElementById("ampeltext") != null)
+                            document.getElementById("ampeltext").innerHTML = ampelfarbeText;
                 
                         /** Berechne Zeigerstellung  (#divHospitalisierungBreite) */
                         var zeigerStellung = 0;
@@ -250,7 +155,8 @@
                         if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
                         if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
                 
-                        document.getElementById("divHospitalisierungBreite").setAttribute("style","width:" + zeigerStellung + "%");
+                        if(document.getElementById("divHospitalisierungBreite") != null)
+                            document.getElementById("divHospitalisierungBreite").setAttribute("style","width:" + zeigerStellung + "%");
                 
                         /** Berechne Zeigerstellung  (#divBehandlungBreite) */
                         zeigerStellung = 0;
@@ -267,8 +173,12 @@
                                 
                         if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
                         if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
-                
-                        document.getElementById("divBehandlungBreite").setAttribute("style","width:" + zeigerStellung + "%");
+
+                        if(document.getElementById("divBehandlungBreite") != null)
+                            document.getElementById("divBehandlungBreite").setAttribute("style","width:" + zeigerStellung + "%");
+
+                        //Alle Daten zur Anzeige und Nutzung im Frontend vorbereiten
+                        anzeigeWerte(gemeindeSchluessel, data, result, ampelfarbeText, istHotspot);
                     });                
                 });
                 console.log('Die angezeigte Krankenhausampel ist kostenlos und konfigurierbar als Skript verfuegbar: www.krankenhausampel.info');
@@ -280,10 +190,10 @@
              * @param {*} hinweisAn - CSS id des Elementes, was angezeigt werden soll (hinweis2GRegel, hinweis3GRegel oder hinweis2GplusRegel)
              */
             function hinweiseAnzeigen(hinweisAn) {
-                document.getElementById("hinweis3GplusRegel").style.display = "none";
-                document.getElementById("hinweis3GRegel").style.display = "none";
-                document.getElementById("hinweis2GRegel").style.display = "none";
-                document.getElementById(hinweisAn).style.display = "contents";
+                if (document.getElementById("hinweis3GplusRegel") != null) { document.getElementById("hinweis3GplusRegel").style.display = "none"; }
+                if (document.getElementById("hinweis3GRegel") != null) { document.getElementById("hinweis3GRegel").style.display = "none"; }
+                if (document.getElementById("hinweis2GRegel") != null) { document.getElementById("hinweis2GRegel").style.display = "none"; }
+                if (document.getElementById(hinweisAn) != null) { document.getElementById(hinweisAn).style.display = "contents"; }
             }
 
             /**
@@ -301,4 +211,82 @@
                     gemeindeSchluessel = '09184'; //Default: Landkreis Muenchen
                 }
                 return gemeindeSchluessel;
+            }
+
+            /**
+             * Default Werte der Ampel setzen. 
+             */
+            function defaultWerteSetzen() {
+                //Grenzwerte setzen
+                if(document.getElementById("anzeigeAmpelGrenzwertHospitalisierung") != null) { document.getElementById("anzeigeAmpelGrenzwertHospitalisierung").innerHTML ="Grenzwert: " + grenzwertHospitalisierung + "&nbsp;"; }
+                if(document.getElementById("anzeigeAmpelGrenzwertIntensivGelb") != null) { document.getElementById("anzeigeAmpelGrenzwertIntensivGelb").innerHTML ="Grenzwerte: " + grenzwertIntensivBehandlungGelb + "&nbsp;"; }
+                if(document.getElementById("anzeigeAmpelGrenzwertIntensivRot") != null) { document.getElementById("anzeigeAmpelGrenzwertIntensivRot").innerHTML = grenzwertIntensivBehandlungRot + "&nbsp;"; }
+                //Hinweise mit Regeltexten (2G/3G/3Gplus/Hotspot) alle nicht sichtbar 
+                if(document.getElementById("hinweisHotspot") != null) { document.getElementById("hinweisHotspot").style.display = "none"; }
+                if(document.getElementById("hinweis2GRegel") != null) { document.getElementById("hinweis2GRegel").style.display = "none"; }
+                if(document.getElementById("hinweis3GRegel") != null) { document.getElementById("hinweis3GRegel").style.display = "none"; }
+                if(document.getElementById("hinweis3GplusRegel") != null) { document.getElementById("hinweis3GplusRegel").style.display = "none"; }
+                //Ampel Farbe + Text setzen
+                if(document.getElementById("ampeltext") != null) { document.getElementById("ampeltext").innerHTML = ""; }
+                if(document.getElementById("ampelfarbe") != null) { document.getElementById("ampelfarbe").setAttribute("class", "ampelFarbeInitial"); }
+            }
+
+            /**
+             * Bereitet alle verfuegbaren Daten fuer eine Anzeige im Frontend vor. 
+             * Der Key im "mapping" Array ist dabei der Name, den ein "class" Attribut in einem HTML-Tag bekommen muss,
+             * damit der Wert angezeigt wird. Bspw: <span class="anzeigeLandkreisname"></span>
+             * @param {*} datenCoronaAPI 
+             * @param {*} datenKHAAPI 
+             * @param {*} ampelFarbe 
+             * @param {*} istHotspot
+             */
+            function anzeigeWerte (gemeindeSchluessel, datenCoronaAPI, datenKHAAPI, ampelFarbe, istHotspot) {
+                var lkDaten = datenCoronaAPI['data'][gemeindeSchluessel];
+                var hotspot = (istHotspot)? "Ja" :  "Nein"; 
+                var hotspotText = "kein Hotspot";
+                if(istHotspot) {
+                    hotspotText = "Hotspot";
+                }
+                //Mapping aller verfuegbarer Daten fuer eine Anzeige.  
+                var mapping = { "anzeigeLandkreisname": lkDaten['county'].replace('LK', 'Landkreis'),
+                                "anzeigeLandkreisEinwohnerzahl": parseInt(lkDaten['population']),
+                                "anzeige7TageInzidenzWert": (Math.round((lkDaten['weekIncidence'] * 100)) / 100).toFixed(2),
+                                "anzeigeLetztesUpdateRKI": new Date( datenCoronaAPI['meta']['lastUpdate']).toLocaleDateString("de-DE", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' Uhr',
+                                "anzeigeBundeslandName": lkDaten['state'],
+                                "anzeigeHospitalisierteFaelle": datenKHAAPI["rki_hospitalisierung"],
+                                "anzeige7TageInzidenzHospitalisierung": parseFloat(datenKHAAPI["rki_hospitalisierung_inzidenz"]).toFixed(2),
+                                "anzeigeCOVID19FaelleAktuell": parseInt(datenKHAAPI["divi_intensiv"]),
+                                "anzeigeLetztesUpdateDIVI": datenKHAAPI["divi_datenstand"],
+                                "anzeigeBundeslandAdverb": datenKHAAPI['bundesland_name_adverb'],
+                                "anzeigeAnzahlStandorte": parseInt(datenKHAAPI["divi_lk_anzahl_standorte"]),
+                                "anzeigeAnzahlMeldebereiche": parseInt(datenKHAAPI["divi_lk_anzahl_meldebereiche"]),
+                                "anzeigeAnzahlBettenFrei": parseInt(datenKHAAPI["divi_lk_betten_frei"]),
+                                "anzeigeAnzahlBettenBelegt": parseInt(datenKHAAPI["divi_lk_betten_belegt"]),
+                                "anzeigeCOVID19FaelleLKAktuell": parseInt(datenKHAAPI["divi_lk_faelle_covid_aktuell"]),
+                                "anzeigeCOVID19FaelleAktuellBeatmet": parseInt(datenKHAAPI["divi_lk_faelle_covid_aktuell_invasiv_beatmet"]),
+                                "anzeigeCOVID19FaelleGesamt": parseInt(lkDaten['cases']),
+                                "anzeigeCOVID19FaelleGesamtTod": parseInt(lkDaten['deaths']),
+                                "anzeigeCOVID19FaellePro100kEinwohner": parseFloat(lkDaten['casesPer100k']).toFixed(2),
+                                "anzeigeCOVID19FaelleLetzte7Tage": parseInt(lkDaten['casesPerWeek']),
+                                "anzeigeCOVID19FaelleLetzte7TageTod": parseInt(lkDaten['deathsPerWeek']),
+                                "anzeigeCOVID19FaelleGesamtGenesen": parseInt(lkDaten['recovered']),
+                                "anzeigeGrenzeInzidenzWert3G": grenzwertInzidenz3GRegel,
+                                "anzeigeGrenzwertHospitalisierung": grenzwertHospitalisierung,
+                                "anzeigeGrenzwertIntensivGelb": grenzwertIntensivBehandlungGelb,
+                                "anzeigeGrenzwertIntensivRot": grenzwertIntensivBehandlungRot,
+                                "anzeigeHotspotInzidenzGrenze7Tage": grenzwertHotspotInzidenz7Tage,
+                                "anzeigeHotspotIntensivbettenAuslastungProzent": grenzwertHotspotIntensivbettenAuslastung,
+                                "anzeigeAmpelfarbe": ampelFarbe,
+                                "anzeigeHotspotJaNein": hotspot,
+                                "anzeigeHotspotText": hotspotText,
+                                "anzeigeGemeindeschluessel": gemeindeSchluessel
+                            };
+                //Alle Elemente mit dem class Wert "key" finden und mit dem Wert ersetzen
+                for (var key in mapping) {
+                    var output= document.querySelectorAll('[class="'+key+'"]');
+                    for(var i = 0; i < output.length; i++) {
+                        output[i].innerHTML = mapping[key];
+                    }
+                }
+                return mapping;
             }
