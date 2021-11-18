@@ -46,7 +46,7 @@ Die Ampel kann beliebig verändert und den eigenen Bedürfnissen angepasst werde
      
      entfernt werden. Einfach mit `STRG+F` nach _`farbnameSichtbar`_ suchen und alle Vorkommnisse entfernen.
 
-* **Farbname in Ampel:** Um den Farbnamen in der Ampel nicht in voller Deckkraft sondern etwas transparenter (_stylischer_) anzuzeigen kann bei dem `<div>`-Element mit der `id="ampeltext"` die CSS-Klasse _`farbnameVolleDeckkraft`_ entfernt werden.
+* **Farbname in Ampel:** Um den Farbnamen in der Ampel nicht in voller Deckkraft sondern etwas transparenter (_stylischer_) anzuzeigen kann bei dem `<div>`-Element mit der `id="ampeltext"` ([Zeile 32](ampel.html#L32)) die CSS-Klasse _`farbnameVolleDeckkraft`_ entfernt werden.
 
 * **Anpassung der Text für die angezeigten Regeln:** Die Texte zu den aktuell geltenden Regeln (2G, 3G, 3Gplus) können beliebig angepasst werden: 
    * Text für die 3G-Regel in [Zeile 45](ampel.html#L45)

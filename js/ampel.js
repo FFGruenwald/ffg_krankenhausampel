@@ -3,13 +3,13 @@
             var gemeindeSchluessel = '09184'; //die ersten 5 Zahlen des Gemeindeschlüssels! Beispiel: Gemeinde Grünwald, Landkreis München: 09184
 
             /** Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB */
-            var grenzwertHospitalisierung = 1200; //Bayern = 1200
+            var grenzwertHospitalisierung = 0; //Bayern = 1200
     
             /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel GELB */
-            var grenzwertIntensivBehandlungGelb = 450; //Bayern = 450
+            var grenzwertIntensivBehandlungGelb = 0; //Bayern = 450
 
             /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel ROT */
-            var grenzwertIntensivBehandlungRot = 600; //Bayern = 600
+            var grenzwertIntensivBehandlungRot = 0; //Bayern = 600
             
             /** Eingabe des Grenzwertes für 7-Tage Inzidenz im Landkreis (siehe gemeindeSchluessel). Ab diesem Wert gilt die 3G-Regel */
             var grenzwertInzidenz3GRegel = 35;
@@ -17,6 +17,8 @@
             /** Hotspot-Definition: 7-Tage Inzidenzwert Landkreis und Angabe Intensivbettenauslastung ab dem die Hotspot-Regel greift (Ampel ROT) */
             var grenzwertHotspotInzidenz7Tage = 300;
             var grenzwertHotspotIntensivbettenAuslastung = 80; //in Prozent
+			/* Falls zutreffend, Hinweis, dass LK ein Hotspot ist immer anzeigen - auch wenn Ampel "regulaer" schon auf Rot steht */
+			var hotspotHinweisImmerAnzeigen = false;
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,10 +68,7 @@
                         grenzwertIntensivBehandlungRot = gwIntensivRot;
                     }
                 }
-                //Grenzwerte zu "echten" Zahlen parsen
-                grenzwertHospitalisierung = parseInt(grenzwertHospitalisierung);
-                grenzwertIntensivBehandlungGelb = parseInt(grenzwertIntensivBehandlungGelb);
-                grenzwertIntensivBehandlungRot = parseInt(grenzwertIntensivBehandlungRot);
+
                 var client = new HttpClient();
                 var restServiceUrl = 'https://api.corona-zahlen.org/districts/' + gemeindeSchluessel;
                 client.get(restServiceUrl, function(response) {              
@@ -92,6 +91,22 @@
                         rkiHospitalisierteFaelle                = parseInt(result["rki_hospitalisierung"]);
                         diviFaelleCovidAktuell                  = parseInt(result["divi_intensiv"]);
                         diviLandkreisIntensivbettenAuslastung   = parseFloat(result["divi_lk_prozent_anteil_belegte_betten_an_gesamtbetten"]);
+
+                        //Grenzwerte ermitteln und ggfl. manuell überschreiben
+                        if(isNaN(grenzwertHospitalisierung) || grenzwertHospitalisierung == 0 ) {
+                            grenzwertHospitalisierung = result['bundesland_ampel_grenzwert1'];
+                        }
+                        if(isNaN(grenzwertIntensivBehandlungGelb) || grenzwertIntensivBehandlungGelb == 0 ) {
+                            grenzwertIntensivBehandlungGelb = result['bundesland_ampel_grenzwert2'];
+                        }
+                        if(isNaN(grenzwertIntensivBehandlungRot) || grenzwertIntensivBehandlungRot == 0 ) {
+                            grenzwertIntensivBehandlungRot = result['bundesland_ampel_grenzwert3'];
+                        }
+                        defaultGrenzwerteSetzen(grenzwertHospitalisierung, grenzwertIntensivBehandlungGelb, grenzwertIntensivBehandlungRot);
+                        //Grenzwerte zu "echten" Zahlen parsen
+                        grenzwertHospitalisierung = parseInt(grenzwertHospitalisierung);
+                        grenzwertIntensivBehandlungGelb = parseInt(grenzwertIntensivBehandlungGelb);
+                        grenzwertIntensivBehandlungRot = parseInt(grenzwertIntensivBehandlungRot);
 
                         //Ermitteln ob Landkreis ein Hotspot ist
                         var istHotspot = false;
@@ -121,19 +136,18 @@
                             ampelzusatztext = "3G<font style='text-transform:lowercase;'>Plus</font>-Regel";
                             hinweiseAnzeigen("hinweis3GplusRegel");
                         }
-                        if (diviFaelleCovidAktuell >= grenzwertIntensivBehandlungRot) {
+                        if (diviFaelleCovidAktuell >= grenzwertIntensivBehandlungRot || istHotspot) {
                             cssClassAmpelfarbe ="ampelrot";
                             ampelfarbeText = "Rot";
                             ampelzusatztext = "2G-Regel";
                             hinweiseAnzeigen("hinweis2GRegel");
-                        }
-                        //Hotspot schlaegt alle Farben:
-                        if(istHotspot) {
-                            cssClassAmpelfarbe ="ampelrot";
-                            ampelfarbeText = "Rot";
-                            ampelzusatztext = "2G-Regel";
-                            if(document.getElementById("hinweisHotspot") != null)
-                                document.getElementById("hinweisHotspot").style.display = "contents";
+							//Falls LK als Hotspot identifiziert wurde, aber im BL die Faelle auf Intensivstationen noch nicht kritisch sind,
+							//(Ampel Gruen oder Gelb) dann Hotspot-Hinweis immer anzeigen, auch wenn hotspotHinweisImmerAnzeigen auf FALSE steht.
+							if(diviFaelleCovidAktuell < grenzwertIntensivBehandlungRot) hotspotHinweisImmerAnzeigen = true;
+							if (istHotspot && hotspotHinweisImmerAnzeigen){
+								if(document.getElementById("hinweisHotspot") != null)
+									document.getElementById("hinweisHotspot").style.display = "contents";								
+							}
                         }
 
                         /** Zusatztext unter der Ampel je nach Ampelfarbe (2G, 3G, 3GPlus,...) */
@@ -187,12 +201,13 @@
             /**
              * Anzeige des <span> Tags mit der id in Parmeter "hinweisAn".
              * Alle anderen Elemente werden auf 'display:none' gesetzt.
-             * @param {*} hinweisAn - CSS id des Elementes, was angezeigt werden soll (hinweis2GRegel, hinweis3GRegel oder hinweis2GplusRegel)
+             * @param {*} hinweisAn - CSS id des Elementes, was angezeigt werden soll (hinweis2GRegel, hinweis2GplusRegel, hinweis3GRegel oder hinweis2GplusRegel)
              */
             function hinweiseAnzeigen(hinweisAn) {
                 if (document.getElementById("hinweis3GplusRegel") != null) { document.getElementById("hinweis3GplusRegel").style.display = "none"; }
                 if (document.getElementById("hinweis3GRegel") != null) { document.getElementById("hinweis3GRegel").style.display = "none"; }
                 if (document.getElementById("hinweis2GRegel") != null) { document.getElementById("hinweis2GRegel").style.display = "none"; }
+                if (document.getElementById("hinweis2GplusRegel") != null) { document.getElementById("hinweis2GplusRegel").style.display = "none"; }
                 if (document.getElementById(hinweisAn) != null) { document.getElementById(hinweisAn).style.display = "contents"; }
             }
 
@@ -213,16 +228,26 @@
                 return gemeindeSchluessel;
             }
 
-            /**
-             * Default Werte der Ampel setzen. 
-             */
-            function defaultWerteSetzen() {
+            function defaultGrenzwerteSetzen(gw1, gw2, gw3){
+                if(gw1 != null && gw2 != null && gw3 != null) {
+                    grenzwertHospitalisierung = gw1;
+                    grenzwertIntensivBehandlungGelb = gw2;
+                    grenzwertIntensivBehandlungRot = gw3;
+                }                
                 //Grenzwerte setzen
                 if(document.getElementById("anzeigeAmpelGrenzwertHospitalisierung") != null) { document.getElementById("anzeigeAmpelGrenzwertHospitalisierung").innerHTML ="Grenzwert: " + grenzwertHospitalisierung + "&nbsp;"; }
                 if(document.getElementById("anzeigeAmpelGrenzwertIntensivGelb") != null) { document.getElementById("anzeigeAmpelGrenzwertIntensivGelb").innerHTML ="Grenzwerte: " + grenzwertIntensivBehandlungGelb + "&nbsp;"; }
                 if(document.getElementById("anzeigeAmpelGrenzwertIntensivRot") != null) { document.getElementById("anzeigeAmpelGrenzwertIntensivRot").innerHTML = grenzwertIntensivBehandlungRot + "&nbsp;"; }
+            }
+
+            /**
+             * Default Werte der Ampel setzen. 
+             */
+            function defaultWerteSetzen() {
+                defaultGrenzwerteSetzen(null, null, null);
                 //Hinweise mit Regeltexten (2G/3G/3Gplus/Hotspot) alle nicht sichtbar 
                 if(document.getElementById("hinweisHotspot") != null) { document.getElementById("hinweisHotspot").style.display = "none"; }
+                if(document.getElementById("hinweis2GplusRegel") != null) { document.getElementById("hinweis2GplusRegel").style.display = "none"; }
                 if(document.getElementById("hinweis2GRegel") != null) { document.getElementById("hinweis2GRegel").style.display = "none"; }
                 if(document.getElementById("hinweis3GRegel") != null) { document.getElementById("hinweis3GRegel").style.display = "none"; }
                 if(document.getElementById("hinweis3GplusRegel") != null) { document.getElementById("hinweis3GplusRegel").style.display = "none"; }
@@ -258,6 +283,7 @@
                                 "anzeigeCOVID19FaelleAktuell": parseInt(datenKHAAPI["divi_intensiv"]),
                                 "anzeigeLetztesUpdateDIVI": datenKHAAPI["divi_datenstand"],
                                 "anzeigeBundeslandAdverb": datenKHAAPI['bundesland_name_adverb'],
+                                "anzeigeBundeslandInfoUrl": datenKHAAPI['bundesland_info_url'],
                                 "anzeigeAnzahlStandorte": parseInt(datenKHAAPI["divi_lk_anzahl_standorte"]),
                                 "anzeigeAnzahlMeldebereiche": parseInt(datenKHAAPI["divi_lk_anzahl_meldebereiche"]),
                                 "anzeigeAnzahlBettenFrei": parseInt(datenKHAAPI["divi_lk_betten_frei"]),
@@ -285,7 +311,12 @@
                 for (var key in mapping) {
                     var output= document.querySelectorAll('[class="'+key+'"]');
                     for(var i = 0; i < output.length; i++) {
-                        output[i].innerHTML = mapping[key];
+                        //Sonderbehandlung: URLs
+                        if("A" === output[i].tagName && key.indexOf("Url") != -1){
+                            output[i].setAttribute("href", 'https://' + mapping[key]);
+                            output[i].setAttribute("title", 'Webseite aufrufen: ' + mapping[key]);
+                        }                    
+                        output[i].innerHTML = mapping[key];                                                
                     }
                 }
                 return mapping;
