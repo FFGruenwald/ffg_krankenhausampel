@@ -3,7 +3,9 @@
 Die Krankenhaus-Ampel für alle Webseitenbetreiber zur grafischen (oder textuellen) Anzeige auf Webseiten. 
 Kostenlos, frei konfigurierbar, für alle Landkreise und Bundesländer. 
 
-> **Ampeltest und Live-Konfiguration unter: https://krankenhausampel.info**
+> **Ampeltest und Live-Konfiguration unter: https://krankenhausampel.info** 
+> 
+> Demo mit Textanzeige: https://krankenhausampel.inf/ampel/text.html
 
 Dieses GitHub-Projekt stellt ein Skript zur Verfügung, welches die aktuelle COVID-19 Hospitalisierungsrate sowie der Auslastung von Intensivbetten durch Corona-Erkrankte in einem Bundesland grafisch gegenüber stellt. Daraus wird die gültige Ampelfarbe abgeleitet und angezeigt. Lokale Hotspots (auf Landkreisebene) werden berücksichtigt. 
 Zur Datenermittlung werden die folgenden beiden APIs verwendet:
