@@ -29,6 +29,7 @@ Die folgenden Schritte sind nötig um die Krankenhausampel für einen beliebigen
     * **Hotspotdefinition:** Werden die folgenden beiden Grenzwerte überschritten, springt die Ampel sofort auf Rot, ohne Hospitalisierungsrate und intensivmedizinische Behandlungen zu berücksichtigen:
         * **`grenzwertHotspotInzidenz7Tage`** ([Zeile 18](js/ampel.js#L18)) - Der Grenzwert für eine 7-Tages-Inzidenz, ab der ein Landkreis als Hotspot eingestuft wird. Beispiel: *`300`* für Bayern.
         * **`grenzwertHotspotIntensivbettenAuslastung`** ([Zeile 19](js/ampel.js#L19)) - Der Grenzwert (in Prozent) von belegten Intensivbetten im Landkreis, ab dem er als Hotspot eingestuft wird. Beispiel: *`80`* (%) für Bayern. 
+        * **`hotspotHinweisImmerAnzeigen`** ([Zeile 21](js/ampel.js#L21)) - Wurde der Landkreis als Hotspot identifiziert, wird ein [Hinweis](/ampel.html#L57) dazu angezeigt. Steht aber die Ampel bereits durch die Anzahl der _Fälle in intensivmedizinischer Behandlung_ auf rot, ist die zusätzliche Anzeige nicht nötig. Wird dieser Parameter auf `true` gesetzt, wird der Hinweis trotzdem angezeigt.
 3) Nachdem die Werte angepasst wurden, funktioniert die Ampel und kann verwendet werden:
     * Ein Beispiel HTML-Code zur grafischen Anzeige findet sich in der Datei **`ampel.html`**. Diese braucht nach der Anpassung der Parameter im lokalen Projekt nur noch aufgerufen werden und stellt die Ampel für den angegebenen Gemeindeschlüssel dar.
     * Sollen die Daten in einem Fließtext verwendet werden, enthält die Datei **`text.html`** alle verfügbaren Anzeigelemente, mit denen sich die Daten anzeigen lassen (inkl. Dokumentation). Auch diese Datei kann nach der Anpassung der Parameter im lokalen Projekt einfach aufgerufen werden. 
@@ -42,7 +43,7 @@ Die Ampel kann beliebig verändert und den eigenen Bedürfnissen angepasst werde
 * **Farbnamen auf Balken:** Wenn es nicht gewünscht ist, die Farbnamen ("Gelb" und "Rot") auf den Balken der Ampel-Indikatoren anzuzeigen, muss  die CSS-Klasse _`farbnameSichtbar`_ auf den `<div>`-Elementen
      * `id="balkenFarbeGelbHospitalisierteFaelle"`
      * `id="balkenFarbeGelbIntensivbehandlung"` und
-     * `id="balkenFarbeRot"`
+     * `id="balkenFarbeRotIntensivbehandlung"`
      
      entfernt werden. Einfach mit `STRG+F` nach _`farbnameSichtbar`_ suchen und alle Vorkommnisse entfernen.
 
