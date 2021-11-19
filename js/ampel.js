@@ -1,24 +1,44 @@
-            /** Angabe des Gemeindeschlüssels, aus dem der Landkreis ermittelt wird! Es genügen die erste 5 Zahlen!
-            /** Gemeindeschlüssel hier ermitteln: https://www.riserid.eu/data/user_upload/downloads/info-pdf.s/Diverses/Liste-Amtlicher-Gemeindeschluessel-AGS-2015.pdf */
+            /**
+             *  Angabe des Amtlichen Gemeindeschlüssels (AGS), aus dem der Landkreis und das Bundelsand ermittelt werden.
+             *  Hier reichen die ersten 5 Stellen des ingesesamt 8-stelligen Schlüssels.
+             *  Der Amtliche Gemeindeschlüssel kann bspw. hier ermittelt werden: https://www.statistikportal.de/de/gemeindeverzeichnis
+             */
             var gemeindeSchluessel = '09184'; //die ersten 5 Zahlen des Gemeindeschlüssels! Beispiel: Gemeinde Grünwald, Landkreis München: 09184
 
-            /** Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB */
-            var grenzwertHospitalisierung = 0; //Bayern = 1200
+            /** 
+             *  OPTIONAL: Eingabe des Grenzwertes für die Fälle der 7-Tages-Hospitalisierungs-Inzidenz. Ab diesem Wert wird die Ampel GELB! 
+             *  Bei Angabe der Zahl 0 (=Standard) wird der Wert automatisch auf Basis des Gemeindeschlüssels über unsere API ermittelt.
+             *  Er kann hier jedoch manuell überschrieben werden. Beispiel: Bayern = 1200
+             */
+            var grenzwertHospitalisierung = 0;
     
-            /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel GELB */
-            var grenzwertIntensivBehandlungGelb = 0; //Bayern = 450
+            /** 
+             *  OPTIONAL: Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel GELB!
+             *  Bei Angabe der Zahl 0 (=Standard) wird der Wert automatisch auf Basis des Gemeindeschlüssels über unsere API ermittelt.
+             *  Er kann hier jedoch manuell überschrieben werden. Beispiel: Bayern = 450
+             */
+            var grenzwertIntensivBehandlungGelb = 0;
 
-            /** Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel ROT */
-            var grenzwertIntensivBehandlungRot = 0; //Bayern = 600
+            /** 
+             *  OPTIONAL: Eingabe des Grenzwertes für die COVID-19 Fälle auf Intensivstationen. Ab diesem Wert wird die Ampel ROT!
+             *  Bei Angabe der Zahl 0 (=Standard) wird der Wert automatisch auf Basis des Gemeindeschlüssels über unsere API ermittelt.
+             *  Er kann hier jedoch manuell überschrieben werden. Beispiel: Bayern = 600
+             */
+            var grenzwertIntensivBehandlungRot = 0;
             
-            /** Eingabe des Grenzwertes für 7-Tage Inzidenz im Landkreis (siehe gemeindeSchluessel). Ab diesem Wert gilt die 3G-Regel */
+            /** Eingabe des Grenzwertes für die 7-Tages-Inzidenz im Landkreis, ab dem die 3G-Regel gilt (und der Hinweis dazu angezeigt wird) */
             var grenzwertInzidenz3GRegel = 35;
 
-            /** Hotspot-Definition: 7-Tage Inzidenzwert Landkreis und Angabe Intensivbettenauslastung ab dem die Hotspot-Regel greift (Ampel ROT) */
+            /** 
+             *  Hotspot-Definition: 
+             *  -> grenzwertHotspotInzidenz7Tage: 7-Tages-Inzidenzwert für den Landkreis, ab dem er als Hotspot in Betracht kommt 
+             *  -> grenzwertHotspotIntensivbettenAuslastung: Angabe der Intensivbettenauslastung in Prozent, ab dem er als Hotspot in Betracht kommt 
+             *  Werden beide Werte überschritten, greift die Hotspot-Regel und die Ampel springt sofort auf Rot. 
+             */
             var grenzwertHotspotInzidenz7Tage = 300;
             var grenzwertHotspotIntensivbettenAuslastung = 80; //in Prozent
-			/* Falls zutreffend, Hinweis, dass LK ein Hotspot ist immer anzeigen - auch wenn Ampel "regulaer" schon auf Rot steht */
-			var hotspotHinweisImmerAnzeigen = false;
+            /* Falls zutreffend, Hinweis, dass Landkreis ein Hotspot ist immer anzeigen - auch wenn Ampel "regulär" schon auf Rot steht. */
+            var hotspotHinweisImmerAnzeigen = false;
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,7 +321,7 @@
                                 "anzeigeGrenzwertIntensivGelb": grenzwertIntensivBehandlungGelb,
                                 "anzeigeGrenzwertIntensivRot": grenzwertIntensivBehandlungRot,
                                 "anzeigeHotspotInzidenzGrenze7Tage": grenzwertHotspotInzidenz7Tage,
-                                "anzeigeHotspotIntensivbettenAuslastungProzent": grenzwertHotspotIntensivbettenAuslastung,
+                                "anzeigeHotspotIntensivbettenAuslastungProzent": parseFloat(datenKHAAPI['divi_lk_prozent_anteil_belegte_betten_an_gesamtbetten']),
                                 "anzeigeAmpelfarbe": ampelFarbe,
                                 "anzeigeHotspotJaNein": hotspot,
                                 "anzeigeHotspotText": hotspotText,
