@@ -103,7 +103,7 @@
 
                     //Rest API Aufrufe muessen verschachtelt werden, da Bundesland erst von der RKI API ermittelt wird
                     var nClient = new HttpClient();
-                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/v3/?bl=' + landkreisDaten['stateAbbreviation'] + '&gs=' + gemeindeSchluessel;
+                    var nRestServiceUrl = 'https://krankenhausampel.info/corona/v4/?bl=' + landkreisDaten['stateAbbreviation'] + '&gs=' + gemeindeSchluessel;
                     nClient.get(nRestServiceUrl, function(apiResponse) {
                         var result = JSON.parse(apiResponse);
                         //Nur fuer Berechnungen relevante Werte werden hier zugewiesen, 
@@ -169,6 +169,15 @@
 									document.getElementById("hinweisHotspot").style.display = "contents";								
 							}
                         }
+                        
+                        /** v4 - Aktuelles "Dauerrot" der Ampel fuer die Bundeslaender in der API berücksichtigen */
+                        if(result["bundesland_ampel_dauerrot"] && result["bundesland_ampel_dauerrot"] === true){
+                            console.log("Ampel steht aktuell für " + landkreisDaten['state'] + " auf Dauerrot! Es werden keine Inzidenz- oder Hospitalisierungswerte bei der Ampelfarbe zurberücksichtigt.");
+                            cssClassAmpelfarbe ="ampelrot";
+                            ampelfarbeText = "Rot";
+                            ampelzusatztext = "2G-Regel";
+                            hinweiseAnzeigen("hinweis2GRegel");
+                        }
 
                         /** Zusatztext unter der Ampel je nach Ampelfarbe (2G, 3G, 3GPlus,...) */
                         if(document.getElementById("ampelzusatztext") != null)
@@ -185,7 +194,7 @@
                 
                         /** Berechne Zeigerstellung  (#divHospitalisierungBreite) */
                         var zeigerStellung = 0;
-                        zeigerStellung = Math.round((rkiHospitalisierteFaelle * 67) / grenzwertHospitalisierung);
+                        zeigerStellung = Math.round((rkiHospitalisierteFaelle * 68) / grenzwertHospitalisierung);
                         if(zeigerStellung >= 95) { zeigerStellung = 95; } //Verhindern dass Zeigerspitze rechts neben Balken landet...
                         if(zeigerStellung <= 2) { zeigerStellung = 2; } //Verhindern dass Zeigerspitze links neben Balken landet...
                 
